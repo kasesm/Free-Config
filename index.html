@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>پنل کانفیگ رایگان</title>
+    <title>کانفیگ رایگان V2Ray</title>
     <link rel="icon" type="image/jpeg" href="icon.jpg">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -11,45 +11,68 @@
         @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&display=swap');
         body { background-color: #0d1117; color: white; font-family: 'Vazirmatn', sans-serif; }
         .glass { background: rgba(22, 27, 34, 0.8); border: 1px solid rgba(255, 255, 255, 0.05); transition: 0.3s; }
-        .glass:hover { transform: translateY(-5px); border-color: #3b82f6; }
+        .glass:hover { transform: translateY(-5px); border-color: #3b82f6; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
     </style>
 </head>
-<body class="flex flex-col items-center p-6 min-h-screen">
+<body class="flex flex-col items-center p-4 md:p-10 min-h-screen">
     
-    <header class="text-center mt-10 mb-12">
-        <h1 class="text-5xl md:text-7xl font-black bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent pb-4">
+    <header class="text-center mt-6 mb-12 w-full max-w-2xl px-4">
+        <h1 class="text-4xl sm:text-5xl md:text-7xl font-black bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent pb-4 leading-tight">
             کانفیگ رایگان
         </h1>
-        <p class="text-gray-400">آخرین آپدیت: <span id="last-update" class="text-blue-400 font-bold">...</span></p>
+        <div class="flex items-center justify-center gap-2 mt-2 text-gray-400 text-xs sm:text-sm">
+            <span class="relative flex h-3 w-3"><span class="animate-ping absolute h-full w-full rounded-full bg-green-400 opacity-75"></span><span class="relative h-3 w-3 rounded-full bg-green-500"></span></span>
+            بروزرسانی زنده: <span id="last-update" class="text-blue-400 font-bold">...</span>
+        </div>
     </header>
 
-    <main class="w-full max-w-lg space-y-4">
-        <div onclick="copyLink('all_sub.txt')" class="glass rounded-2xl p-6 flex items-center justify-between cursor-pointer border-blue-500/20">
+    <main class="w-full max-w-lg space-y-4 px-2">
+        <div onclick="copyLink('all_sub.txt')" class="glass rounded-2xl p-5 flex items-center justify-between cursor-pointer border-blue-500/20">
             <span id="count-all" class="text-blue-400 text-xs font-bold bg-blue-500/10 px-2 py-1 rounded-lg">...</span>
-            <div class="flex items-center gap-4 font-bold text-lg">کپی لینک اشتراک (ALL) <i class="fas fa-layer-group text-blue-500"></i></div>
+            <div class="flex items-center gap-4 font-bold">همه پروتکل‌ها <i class="fas fa-layer-group text-blue-500 text-xl"></i></div>
         </div>
 
-        <div onclick="copyLink('vless_sub.txt')" class="glass rounded-2xl p-6 flex items-center justify-between cursor-pointer border-green-500/20">
+        <div onclick="copyLink('vless_sub.txt')" class="glass rounded-2xl p-5 flex items-center justify-between cursor-pointer border-green-500/10">
             <span id="count-vless" class="text-green-400 text-xs font-bold bg-green-500/10 px-2 py-1 rounded-lg">...</span>
-            <div class="flex items-center gap-4 font-bold text-lg">کپی لینک VLESS <i class="fas fa-shield-halved text-green-500"></i></div>
+            <div class="flex items-center gap-4 font-bold text-white">پروتکل VLESS <i class="fas fa-shield-halved text-green-500 text-xl"></i></div>
+        </div>
+
+        <div onclick="copyLink('vmess_sub.txt')" class="glass rounded-2xl p-5 flex items-center justify-between cursor-pointer border-purple-500/10">
+            <span id="count-vmess" class="text-purple-400 text-xs font-bold bg-purple-500/10 px-2 py-1 rounded-lg">...</span>
+            <div class="flex items-center gap-4 font-bold text-white text-purple-100">پروتکل VMESS <i class="fas fa-rocket text-purple-500 text-xl"></i></div>
+        </div>
+
+        <div onclick="copyLink('trojan_sub.txt')" class="glass rounded-2xl p-5 flex items-center justify-between cursor-pointer border-red-500/10">
+            <span id="count-trojan" class="text-red-400 text-xs font-bold bg-red-500/10 px-2 py-1 rounded-lg">...</span>
+            <div class="flex items-center gap-4 font-bold text-white text-red-100">پروتکل Trojan <i class="fas fa-user-secret text-red-500 text-xl"></i></div>
+        </div>
+
+        <div onclick="copyLink('ss_sub.txt')" class="glass rounded-2xl p-5 flex items-center justify-between cursor-pointer border-yellow-500/10">
+            <span id="count-ss" class="text-yellow-400 text-xs font-bold bg-yellow-500/10 px-2 py-1 rounded-lg">...</span>
+            <div class="flex items-center gap-4 font-bold text-white text-yellow-100">پروتکل Shadowsocks <i class="fas fa-key text-yellow-500 text-xl"></i></div>
         </div>
     </main>
 
-    <script>
-        fetch('info.json').then(r => r.json()).then(data => {
-            document.getElementById('count-all').innerText = data.all + " کانفیگ";
-            document.getElementById('count-vless').innerText = data.vless + " کانفیگ";
-            document.getElementById('last-update').innerText = data.last_update;
-        });
+    <footer class="mt-16 flex gap-10">
+        <a href="#" class="text-gray-500 hover:text-blue-400 transition-all text-3xl"><i class="fab fa-telegram"></i></a>
+        <a href="#" class="text-gray-500 hover:text-pink-500 transition-all text-3xl"><i class="fab fa-instagram"></i></a>
+    </footer>
 
-        function copyLink(fileName) {
-            // ساخت لینک مستقیم Raw گیت‌هاب برای کپی کردن
+    <script>
+        // دریافت آمار از info.json
+        fetch('info.json').then(r => r.json()).then(data => {
+            const keys = ['all', 'vless', 'vmess', 'trojan', 'ss'];
+            keys.forEach(k => { if(data[k] !== undefined) document.getElementById(`count-${k}`).innerText = data[k] + " مورد"; });
+            document.getElementById('last-update').innerText = data.last_update;
+        }).catch(err => console.log("در حال انتظار برای اولین آپدیت..."));
+
+        function copyLink(f) {
             const user = window.location.hostname.split('.')[0];
             const repo = window.location.pathname.split('/')[1];
-            const rawUrl = `https://raw.githubusercontent.com/${user}/${repo}/main/${fileName}`;
+            const url = `https://raw.githubusercontent.com/${user}/${repo}/main/${f}`;
             
-            navigator.clipboard.writeText(rawUrl).then(() => {
-                alert("لینک اشتراک کپی شد! حالا این لینک را در برنامه v2rayNG وارد کنید.");
+            navigator.clipboard.writeText(url).then(() => {
+                alert("لینک کپی شد! آن را در برنامه v2rayNG اضافه کنید.");
             });
         }
     </script>
