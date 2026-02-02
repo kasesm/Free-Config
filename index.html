@@ -11,65 +11,46 @@
         @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&display=swap');
         body { background-color: #0d1117; color: white; font-family: 'Vazirmatn', sans-serif; }
         .glass { background: rgba(22, 27, 34, 0.8); border: 1px solid rgba(255, 255, 255, 0.05); transition: 0.3s; }
-        .glass:hover { transform: translateY(-5px); border-color: rgba(59, 130, 246, 0.4); box-shadow: 0 8px 20px rgba(0,0,0,0.4); }
+        .glass:hover { transform: translateY(-5px); border-color: #3b82f6; }
     </style>
 </head>
-<body class="flex flex-col items-center p-4 min-h-screen">
+<body class="flex flex-col items-center p-6 min-h-screen">
     
-    <header class="text-center mt-10 mb-12 w-full max-w-2xl">
-        <h1 class="text-4xl sm:text-6xl font-black bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent pb-4 leading-normal">
+    <header class="text-center mt-10 mb-12">
+        <h1 class="text-5xl md:text-7xl font-black bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent pb-4">
             کانفیگ رایگان
         </h1>
-        <div class="flex items-center justify-center gap-2 mt-2 text-gray-400 text-xs sm:text-sm">
-            <span class="relative flex h-2 w-2"><span class="animate-ping absolute h-full w-full rounded-full bg-green-400 opacity-75"></span><span class="relative h-2 w-2 rounded-full bg-green-500"></span></span>
-            آخرین بروزرسانی: <span id="last-update" class="text-blue-400 font-bold">...</span>
-        </div>
+        <p class="text-gray-400">آخرین آپدیت: <span id="last-update" class="text-blue-400 font-bold">...</span></p>
     </header>
 
-    <main class="w-full max-w-lg space-y-4 px-2">
-        <div onclick="copyLink('all_sub.txt')" class="glass rounded-2xl p-5 flex items-center justify-between cursor-pointer">
+    <main class="w-full max-w-lg space-y-4">
+        <div onclick="copyLink('all_sub.txt')" class="glass rounded-2xl p-6 flex items-center justify-between cursor-pointer border-blue-500/20">
             <span id="count-all" class="text-blue-400 text-xs font-bold bg-blue-500/10 px-2 py-1 rounded-lg">...</span>
-            <div class="flex items-center gap-4 font-bold">میکس همه پروتکل‌ها <i class="fas fa-layer-group text-blue-500 text-xl"></i></div>
+            <div class="flex items-center gap-4 font-bold text-lg">کپی لینک اشتراک (ALL) <i class="fas fa-layer-group text-blue-500"></i></div>
         </div>
 
-        <div onclick="copyLink('vless_sub.txt')" class="glass rounded-2xl p-5 flex items-center justify-between cursor-pointer border-green-500/10">
+        <div onclick="copyLink('vless_sub.txt')" class="glass rounded-2xl p-6 flex items-center justify-between cursor-pointer border-green-500/20">
             <span id="count-vless" class="text-green-400 text-xs font-bold bg-green-500/10 px-2 py-1 rounded-lg">...</span>
-            <div class="flex items-center gap-4 font-bold">پروتکل VLESS <i class="fas fa-shield-halved text-green-500 text-xl"></i></div>
-        </div>
-
-        <div onclick="copyLink('vmess_sub.txt')" class="glass rounded-2xl p-5 flex items-center justify-between cursor-pointer border-purple-500/10">
-            <span id="count-vmess" class="text-purple-400 text-xs font-bold bg-purple-500/10 px-2 py-1 rounded-lg">...</span>
-            <div class="flex items-center gap-4 font-bold">پروتکل VMESS <i class="fas fa-rocket text-purple-500 text-xl"></i></div>
-        </div>
-
-        <div onclick="copyLink('trojan_sub.txt')" class="glass rounded-2xl p-5 flex items-center justify-between cursor-pointer border-red-500/10">
-            <span id="count-trojan" class="text-red-400 text-xs font-bold bg-red-500/10 px-2 py-1 rounded-lg">...</span>
-            <div class="flex items-center gap-4 font-bold text-red-100">پروتکل Trojan <i class="fas fa-user-secret text-red-500 text-xl"></i></div>
-        </div>
-
-        <div onclick="copyLink('ss_sub.txt')" class="glass rounded-2xl p-5 flex items-center justify-between cursor-pointer border-yellow-500/10">
-            <span id="count-ss" class="text-yellow-400 text-xs font-bold bg-yellow-500/10 px-2 py-1 rounded-lg">...</span>
-            <div class="flex items-center gap-4 font-bold text-yellow-100">پروتکل Shadowsocks <i class="fas fa-key text-yellow-500 text-xl"></i></div>
+            <div class="flex items-center gap-4 font-bold text-lg">کپی لینک VLESS <i class="fas fa-shield-halved text-green-500"></i></div>
         </div>
     </main>
 
-    <footer class="mt-16 flex gap-8">
-        <a href="https://t.me/YOUR_ID" class="text-gray-500 hover:text-blue-400 transition-all text-3xl"><i class="fab fa-telegram"></i></a>
-        <a href="https://instagram.com/YOUR_ID" class="text-gray-500 hover:text-pink-500 transition-all text-3xl"><i class="fab fa-instagram"></i></a>
-    </footer>
-
     <script>
         fetch('info.json').then(r => r.json()).then(data => {
-            const keys = ['all', 'vless', 'vmess', 'trojan', 'ss'];
-            keys.forEach(k => { if(data[k] !== undefined) document.getElementById(`count-${k}`).innerText = data[k] + " مورد"; });
+            document.getElementById('count-all').innerText = data.all + " کانفیگ";
+            document.getElementById('count-vless').innerText = data.vless + " کانفیگ";
             document.getElementById('last-update').innerText = data.last_update;
-        }).catch(err => console.log("Data not ready yet"));
+        });
 
-        function copyLink(f) {
-            const username = window.location.hostname.split('.')[0];
+        function copyLink(fileName) {
+            // ساخت لینک مستقیم Raw گیت‌هاب برای کپی کردن
+            const user = window.location.hostname.split('.')[0];
             const repo = window.location.pathname.split('/')[1];
-            const url = `https://raw.githubusercontent.com/${username}/${repo}/main/${f}`;
-            navigator.clipboard.writeText(url).then(() => alert("لینک اشتراک با موفقیت کپی شد."));
+            const rawUrl = `https://raw.githubusercontent.com/${user}/${repo}/main/${fileName}`;
+            
+            navigator.clipboard.writeText(rawUrl).then(() => {
+                alert("لینک اشتراک کپی شد! حالا این لینک را در برنامه v2rayNG وارد کنید.");
+            });
         }
     </script>
 </body>
