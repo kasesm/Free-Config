@@ -2,40 +2,26 @@ name: Auto Update Panel
 
 on:
   schedule:
-    - cron: '0 */2 * * *' # اجرای خودکار هر ۶ ساعت
-  workflow_dispatch: # امکان اجرای دستی
+    - cron: '0 */2 * * *'
+  workflow_dispatch:
 
 permissions:
-  contents: write # اجازه حیاتی برای ثبت فایل‌های جدید
+  contents: write
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.10'
-
-      - name: Install Dependencies
-        run: pip install requests beautifulsoup4
-
-      - name: Run Scraper
-        run: python scraper.py
-
-      - name: Commit and Push Changes
+      - run: pip install requests beautifulsoup4
+      - run: python scraper.py
+      - name: Commit and Push
         run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          
-          # اضافه کردن تمامی فایل‌های ساخته شده (txt, json, html)
-          git add -A
-          
-          # ثبت تغییرات - اگر تغییری نباشد خطا نمی‌دهد
-          git commit -m "Auto Update Configs: $(date)" || echo "No changes to commit"
-          
-          # ارسال به برنچ اصلی (اگر نام برنچ شما master است، main را به master تغییر دهید)
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add *.txt info.json index.html icon.jpg
+          git commit -m "Manual Update: $(date)" || exit 0
           git push origin main
