@@ -3,50 +3,69 @@ from bs4 import BeautifulSoup
 import re
 import base64
 
-def clean_config(config):
-    # حذف تگ‌های تبلیغاتی انتهای کانفیگ
-    cleaned = re.split(r'[#\s]', config)[0]
-    return cleaned
+def clean_and_rename(config, my_brand="MyFreeNet"):
+    # جدا کردن بخش اصلی کانفیگ از اسم (بعد از #)
+    if '#' in config:
+        base_config = config.split('#')[0]
+        return f"{base_config}#{my_brand}"
+    return f"{config}#{my_brand}"
+
+def extract_host(config):
+    # استخراج آدرس سرور برای شناسایی تکراری‌ها
+    try:
+        host_part = config.split('@')[1].split(':')[0]
+        return host_part
+    except:
+        return config
 
 def get_live_configs(channel_username):
     url = f"https://t.me/s/{channel_username.replace('@', '')}"
-    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
+    headers = {'User-Agent': 'Mozilla/5.0'}
     
     try:
-        response = requests.get(url, headers=headers, timeout=10)
+        response = requests.get(url, headers=headers, timeout=15)
         soup = BeautifulSoup(response.text, 'html.parser')
         messages = soup.find_all('div', class_='tgme_widget_message_text')
         
         configs = []
         for msg in messages:
             raw_text = msg.get_text()
+            # پیدا کردن تمام پروتکل‌ها
             found = re.findall(r'(vless|vmess|ss|trojan)://[^\s<>"]+', raw_text)
-            for f in found:
-                cleaned = clean_config(f)
-                if len(cleaned) > 20:
-                    configs.append(cleaned)
+            configs.extend(found)
         return configs
     except:
         return []
 
-# لیست کانال‌های هدف را اینجا اضافه کنید
+# --- تنظیمات ---
 channels = ['v2rayng_org', 'v2ray_alpha', 'VlessConfig', 'FreeVlessConfig']
+my_name = "Gemini_Configs" # نامی که می‌خواهید روی کانفیگ‌ها باشد
 
-all_configs = []
+all_raw_configs = []
 for ch in channels:
-    all_configs.extend(get_live_configs(ch))
+    print(f"Fetching from {ch}...")
+    all_raw_configs.extend(get_live_configs(ch))
 
-# حذف تکراری‌ها
-unique_configs = list(set(all_configs))
+# --- فیلتر و تمیزکاری ---
+seen_hosts = set()
+unique_configs = []
+
+for conf in all_raw_configs:
+    host = extract_host(conf)
+    if host not in seen_hosts:
+        seen_hosts.add(host)
+        unique_configs.append(clean_and_rename(conf, my_name))
+
+# --- ذخیره‌سازی ---
 final_text = "\n".join(unique_configs)
 
-# ۱. ذخیره به صورت متن ساده (Plain Text)
+# ۱. فایل متنی
 with open('configs.txt', 'w', encoding='utf-8') as f:
     f.write(final_text)
 
-# ۲. ذخیره به صورت Base64 (برای سابلینک استاندارد)
+# ۲. فایل Base64 (سابلینک)
 with open('sub_link.txt', 'w', encoding='utf-8') as f:
-    encoded_configs = base64.b64encode(final_text.encode('utf-8')).decode('utf-8')
-    f.write(encoded_configs)
+    encoded = base64.b64encode(final_text.encode('utf-8')).decode('utf-8')
+    f.write(encoded)
 
-print(f"Done! Found {len(unique_configs)} configs.")
+print(f"Finished! {len(unique_configs)} clean configs saved.")
