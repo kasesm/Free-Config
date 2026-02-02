@@ -1,43 +1,21 @@
-name: Auto Update VPN Sublink & Website
-
+name: Update Configs
 on:
-  schedule:
-    - cron: '0 */6 * * *' # هر ۶ ساعت یک‌بار به صورت خودکار اجرا می‌شود
-  workflow_dispatch: # امکان اجرای دستی از تب Actions در گیت‌هاب
-
+  schedule: [{cron: '0 */2 * * *'}]
+  workflow_dispatch:
 permissions:
-  contents: write # اجازه ثبت تغییرات (Push) در مخزن شما
-
+  contents: write
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
-
-      - name: Install Dependencies
-        run: |
-          pip install requests beautifulsoup4
-
-      - name: Run Scraper Script
-        run: python scraper.py
-
-      - name: Commit and Push Changes
-        run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          
-          # اضافه کردن تمام فایل‌های تولید شده توسط اسکریپت
-          git add configs.txt all_sub.txt vless_sub.txt vmess_sub.txt trojan_sub.txt info.json index.html
-          
-          # بررسی اینکه آیا تغییری وجود دارد یا خیر، سپس ثبت (Commit)
-          git commit -m "Update configs, stats and site: $(date)" || echo "No changes to commit"
-          
-          # ارسال تغییرات به شاخه اصلی (Main)
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.10'}
+      - run: pip install requests beautifulsoup4
+      - run: python scraper.py
+      - run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add *.txt info.json index.html icon.jpg
+          git commit -m "Auto Update" || exit 0
           git push
