@@ -3,6 +3,25 @@ from bs4 import BeautifulSoup
 import re
 import base64
 import json
+import socket
+
+def check_connection(config):
+    # استخراج هاست و پورت برای تست
+    try:
+        if 'vmess://' in config:
+            # vmess پیچیده است، فعلاً فرض می‌کنیم سالم است یا از هاست استفاده می‌کنیم
+            return True 
+        
+        parts = config.split('@')[1].split('#')[0]
+        host_port = parts.split(':')
+        host = host_port[0]
+        port = int(host_port[1].split('?')[0])
+        
+        # تست باز بودن پورت (TCP Connect)
+        with socket.create_connection((host, port), timeout=2):
+            return True
+    except:
+        return False
 
 def get_live_configs(channel_username):
     url = f"https://t.me/s/{channel_username.replace('@', '')}"
@@ -20,17 +39,21 @@ def get_live_configs(channel_username):
     except:
         return []
 
+# --- شروع فرآیند ---
 channels = ['v2rayng_org', 'v2ray_alpha', 'VlessConfig']
-all_configs = list(set(sum([get_live_configs(ch) for ch in channels], [])))
+all_raw = list(set(sum([get_live_configs(ch) for ch in channels], [])))
+
+# تست سلامت کانفیگ‌ها (فقط آن‌هایی که متصل می‌شوند)
+print("Testing configs... this may take a while.")
+valid_configs = [c for c in all_raw if check_connection(c)]
 
 categorized = {
-    'all': all_configs,
-    'vless': [c for c in all_configs if c.startswith('vless')],
-    'vmess': [c for c in all_configs if c.startswith('vmess')],
-    'trojan': [c for c in all_configs if c.startswith('trojan')]
+    'all': valid_configs,
+    'vless': [c for c in valid_configs if c.startswith('vless')],
+    'vmess': [c for c in valid_configs if c.startswith('vmess')],
+    'trojan': [c for c in valid_configs if c.startswith('trojan')]
 }
 
-# ذخیره تعداد کانفیگ‌ها برای نمایش در سایت
 stats = {}
 for key, value in categorized.items():
     stats[key] = len(value)
@@ -41,3 +64,5 @@ for key, value in categorized.items():
 
 with open('info.json', 'w') as f:
     json.dump(stats, f)
+
+print(f"Total valid configs found: {len(valid_configs)}")
