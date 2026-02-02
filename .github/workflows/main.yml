@@ -1,0 +1,32 @@
+name: Auto Update VPN Sublink
+
+on:
+  schedule:
+    - cron: '0 */6 * * *' # هر ۶ ساعت یکبار اجرا می‌شود
+  workflow_dispatch: # امکان اجرای دستی از تب Actions
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install Dependencies
+        run: pip install requests beautifulsoup4
+
+      - name: Run Scraper Script
+        run: python scraper.py
+
+      - name: Commit and Push Changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add configs.txt sub_link.txt
+          git commit -m "Update configs: $(date)" || exit 0
+          git push
