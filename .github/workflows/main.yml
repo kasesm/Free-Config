@@ -32,4 +32,6 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git add *.txt info.json index.html icon.jpg
           git commit -m "Update from new channels: $(date)" || exit 0
+          git add --all
+          git commit -m "Auto Update: $(date)" || exit 0
           git push
