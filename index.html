@@ -10,44 +10,56 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&display=swap');
         
-        body { 
-            background-color: #0d1117; 
-            color: white; 
-            font-family: 'Vazirmatn', sans-serif; 
+        :root {
+            --bg-color: #0d1117;
+            --text-color: #ffffff;
+            --card-bg: rgba(22, 27, 34, 0.8);
         }
 
-        /* استایل پایه برای افکت گلوینگ */
+        .light-mode {
+            --bg-color: #f0f2f5;
+            --text-color: #1a1a1a;
+            --card-bg: rgba(255, 255, 255, 0.9);
+        }
+
+        body { 
+            background-color: var(--bg-color); 
+            color: var(--text-color); 
+            font-family: 'Vazirmatn', sans-serif; 
+            transition: background-color 0.4s, color 0.4s;
+        }
+
         .glow-card {
-            background: rgba(22, 27, 34, 0.8);
+            background: var(--card-bg);
             border: 1px solid rgba(255, 255, 255, 0.05);
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
-            overflow: hidden;
         }
 
-        .glow-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(255, 255, 255, 0.2);
+        .light-mode .glow-card { border: 1px solid rgba(0, 0, 0, 0.05); }
+
+        .glow-card:hover { transform: translateY(-5px); }
+
+        /* Glowing Effects */
+        .glow-all:hover { box-shadow: 0 0 25px rgba(59, 130, 246, 0.5); }
+        .glow-vless:hover { box-shadow: 0 0 25px rgba(34, 197, 94, 0.5); }
+        .glow-vmess:hover { box-shadow: 0 0 25px rgba(168, 85, 247, 0.5); }
+        .glow-trojan:hover { box-shadow: 0 0 25px rgba(239, 68, 68, 0.5); }
+        .glow-ss:hover { box-shadow: 0 0 25px rgba(234, 179, 8, 0.5); }
+
+        #theme-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
         }
-
-        /* رنگ‌بندی اختصاصی هاله‌های نوری (Glowing Effects) */
-        .glow-all { shadow: 0 0 15px rgba(59, 130, 246, 0.3); }
-        .glow-all:hover { box-shadow: 0 0 30px rgba(59, 130, 246, 0.6); }
-
-        .glow-vless { shadow: 0 0 15px rgba(34, 197, 94, 0.3); }
-        .glow-vless:hover { box-shadow: 0 0 30px rgba(34, 197, 94, 0.6); }
-
-        .glow-vmess { shadow: 0 0 15px rgba(168, 85, 247, 0.3); }
-        .glow-vmess:hover { box-shadow: 0 0 30px rgba(168, 85, 247, 0.6); }
-
-        .glow-trojan { shadow: 0 0 15px rgba(239, 68, 68, 0.3); }
-        .glow-trojan:hover { box-shadow: 0 0 30px rgba(239, 68, 68, 0.6); }
-
-        .glow-ss { shadow: 0 0 15px rgba(234, 179, 8, 0.3); }
-        .glow-ss:hover { box-shadow: 0 0 30px rgba(234, 179, 8, 0.6); }
     </style>
 </head>
 <body class="flex flex-col items-center p-6 min-h-screen">
+
+    <button id="theme-btn" onclick="toggleTheme()" class="glass p-3 rounded-full w-12 h-12 flex items-center justify-center bg-white/10 hover:scale-110 transition-all border border-white/20">
+        <i id="theme-icon" class="fas fa-moon text-xl text-yellow-400"></i>
+    </button>
     
     <header class="text-center mt-10 mb-12">
         <h1 class="text-5xl md:text-7xl font-black bg-gradient-to-r from-blue-400 via-purple-500 to-cyan-400 bg-clip-text text-transparent pb-4 leading-tight">
@@ -62,54 +74,65 @@
     </header>
 
     <main class="w-full max-w-lg space-y-5 px-2">
-        <div onclick="copyLink('all_sub.txt')" class="glow-card glow-all rounded-2xl p-6 flex items-center justify-between cursor-pointer group">
+        <div onclick="copyLink('all_sub.txt')" class="glow-card glow-all rounded-2xl p-6 flex items-center justify-between cursor-pointer group shadow-sm">
             <span id="count-all" class="text-blue-400 text-xs font-bold bg-blue-500/10 px-3 py-1 rounded-full group-hover:bg-blue-500 group-hover:text-white transition-colors">...</span>
             <div class="flex items-center gap-4 font-bold text-lg">همه پروتکل‌ها <i class="fas fa-layer-group text-blue-500 text-2xl"></i></div>
         </div>
 
-        <div onclick="copyLink('vless_sub.txt')" class="glow-card glow-vless rounded-2xl p-6 flex items-center justify-between cursor-pointer group">
+        <div onclick="copyLink('vless_sub.txt')" class="glow-card glow-vless rounded-2xl p-6 flex items-center justify-between cursor-pointer group shadow-sm">
             <span id="count-vless" class="text-green-400 text-xs font-bold bg-green-500/10 px-3 py-1 rounded-full group-hover:bg-green-500 group-hover:text-white transition-colors">...</span>
             <div class="flex items-center gap-4 font-bold text-lg">پروتکل VLESS <i class="fas fa-shield-halved text-green-500 text-2xl"></i></div>
         </div>
 
-        <div onclick="copyLink('vmess_sub.txt')" class="glow-card glow-vmess rounded-2xl p-6 flex items-center justify-between cursor-pointer group">
+        <div onclick="copyLink('vmess_sub.txt')" class="glow-card glow-vmess rounded-2xl p-6 flex items-center justify-between cursor-pointer group shadow-sm">
             <span id="count-vmess" class="text-purple-400 text-xs font-bold bg-purple-500/10 px-3 py-1 rounded-full group-hover:bg-purple-500 group-hover:text-white transition-colors">...</span>
             <div class="flex items-center gap-4 font-bold text-lg">پروتکل VMESS <i class="fas fa-rocket text-purple-500 text-2xl"></i></div>
         </div>
 
-        <div onclick="copyLink('trojan_sub.txt')" class="glow-card glow-trojan rounded-2xl p-6 flex items-center justify-between cursor-pointer group">
+        <div onclick="copyLink('trojan_sub.txt')" class="glow-card glow-trojan rounded-2xl p-6 flex items-center justify-between cursor-pointer group shadow-sm">
             <span id="count-trojan" class="text-red-400 text-xs font-bold bg-red-500/10 px-3 py-1 rounded-full group-hover:bg-red-500 group-hover:text-white transition-colors">...</span>
             <div class="flex items-center gap-4 font-bold text-lg">پروتکل Trojan <i class="fas fa-user-secret text-red-500 text-2xl"></i></div>
         </div>
 
-        <div onclick="copyLink('ss_sub.txt')" class="glow-card glow-ss rounded-2xl p-6 flex items-center justify-between cursor-pointer group">
+        <div onclick="copyLink('ss_sub.txt')" class="glow-card glow-ss rounded-2xl p-6 flex items-center justify-between cursor-pointer group shadow-sm">
             <span id="count-ss" class="text-yellow-400 text-xs font-bold bg-yellow-500/10 px-3 py-1 rounded-full group-hover:bg-yellow-500 group-hover:text-white transition-colors">...</span>
-            <div class="flex items-center gap-4 font-bold text-lg text-yellow-50/90">پروتکل Shadowsocks <i class="fas fa-key text-yellow-500 text-2xl"></i></div>
+            <div class="flex items-center gap-4 font-bold text-lg">پروتکل Shadowsocks <i class="fas fa-key text-yellow-500 text-2xl"></i></div>
         </div>
     </main>
 
     <footer class="mt-20 flex gap-12">
-        <a href="#" class="text-gray-500 hover:text-blue-400 transition-all text-4xl hover:scale-110"><i class="fab fa-telegram"></i></a>
-        <a href="#" class="text-gray-500 hover:text-pink-500 transition-all text-4xl hover:scale-110"><i class="fab fa-instagram"></i></a>
+        <a href="https://t.me/your_telegram_id" target="_blank" class="text-gray-500 hover:text-blue-400 transition-all text-4xl hover:scale-110"><i class="fab fa-telegram"></i></a>
+        <a href="https://www.instagram.com/_demonedge_/" target="_blank" class="text-gray-500 hover:text-pink-500 transition-all text-4xl hover:scale-110"><i class="fab fa-instagram"></i></a>
     </footer>
 
     <script>
+        // Fetch Data
         fetch('info.json').then(r => r.json()).then(data => {
             const keys = ['all', 'vless', 'vmess', 'trojan', 'ss'];
-            keys.forEach(k => { 
-                if(data[k] !== undefined) document.getElementById(`count-${k}`).innerText = data[k] + " مورد"; 
-            });
+            keys.forEach(k => { if(data[k] !== undefined) document.getElementById(`count-${k}`).innerText = data[k] + " مورد"; });
             document.getElementById('last-update').innerText = data.last_update;
         });
 
+        // Copy Function
         function copyLink(f) {
             const user = window.location.hostname.split('.')[0];
             const repo = window.location.pathname.split('/')[1] || '';
             const rawUrl = `https://raw.githubusercontent.com/${user}/${repo}/main/${f}`;
-            
-            navigator.clipboard.writeText(rawUrl).then(() => {
-                alert("لینک اشتراک با موفقیت کپی شد!");
-            });
+            navigator.clipboard.writeText(rawUrl).then(() => alert("لینک کپی شد!"));
+        }
+
+        // Theme Toggle
+        function toggleTheme() {
+            const body = document.body;
+            const icon = document.getElementById('theme-icon');
+            body.classList.toggle('light-mode');
+            if(body.classList.contains('light-mode')) {
+                icon.classList.replace('fa-moon', 'fa-sun');
+                icon.style.color = '#f59e0b';
+            } else {
+                icon.classList.replace('fa-sun', 'fa-moon');
+                icon.style.color = '#facc15';
+            }
         }
     </script>
 </body>
