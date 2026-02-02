@@ -2,11 +2,11 @@ name: Auto Update VPN Sublink & Website
 
 on:
   schedule:
-    - cron: '0 */2 * * *' # هر ۶ ساعت یکبار خودکار اجرا می‌شود
-  workflow_dispatch: # امکان اجرای دستی از تب Actions
+    - cron: '0 */6 * * *' # هر ۶ ساعت یک‌بار به صورت خودکار اجرا می‌شود
+  workflow_dispatch: # امکان اجرای دستی از تب Actions در گیت‌هاب
 
 permissions:
-  contents: write # اجازه ثبت تغییرات در مخزن
+  contents: write # اجازه ثبت تغییرات (Push) در مخزن شما
 
 jobs:
   build:
@@ -32,8 +32,12 @@ jobs:
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          # اضافه کردن تمام فایل‌های تولید شده (متن، بیس64، جیسون و ایندکس)
+          
+          # اضافه کردن تمام فایل‌های تولید شده توسط اسکریپت
           git add configs.txt all_sub.txt vless_sub.txt vmess_sub.txt trojan_sub.txt info.json index.html
-          # ثبت تغییرات در صورتی که دیتای جدیدی پیدا شده باشد
-          git commit -m "Update configs and stats: $(date)" || echo "No changes to commit"
+          
+          # بررسی اینکه آیا تغییری وجود دارد یا خیر، سپس ثبت (Commit)
+          git commit -m "Update configs, stats and site: $(date)" || echo "No changes to commit"
+          
+          # ارسال تغییرات به شاخه اصلی (Main)
           git push
