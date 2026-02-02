@@ -2,7 +2,7 @@ name: Auto Update Panel
 
 on:
   schedule:
-    - cron: '0 */2 * * *'
+    - cron: '0 */6 * * *'
   workflow_dispatch:
 
 permissions:
@@ -31,5 +31,5 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add *.txt info.json index.html icon.jpg
-          git commit -m "Auto Update protocols and stats: $(date)" || exit 0
+          git commit -m "Update from new channels: $(date)" || exit 0
           git push
