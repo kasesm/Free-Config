@@ -2,11 +2,11 @@ name: Auto Update Panel
 
 on:
   schedule:
-    - cron: '0 */2 * * *'
-  workflow_dispatch:
+    - cron: '0 */2 * * *' # اجرای خودکار هر ۶ ساعت
+  workflow_dispatch: # امکان اجرای دستی
 
 permissions:
-  contents: write
+  contents: write # اجازه حیاتی برای ثبت فایل‌های جدید
 
 jobs:
   build:
@@ -26,12 +26,16 @@ jobs:
       - name: Run Scraper
         run: python scraper.py
 
-      - name: Commit and Push
+      - name: Commit and Push Changes
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add *.txt info.json index.html icon.jpg
-          git commit -m "Update from new channels: $(date)" || exit 0
-          git add --all
-          git commit -m "Auto Update: $(date)" || exit 0
-          git push
+          
+          # اضافه کردن تمامی فایل‌های ساخته شده (txt, json, html)
+          git add -A
+          
+          # ثبت تغییرات - اگر تغییری نباشد خطا نمی‌دهد
+          git commit -m "Auto Update Configs: $(date)" || echo "No changes to commit"
+          
+          # ارسال به برنچ اصلی (اگر نام برنچ شما master است، main را به master تغییر دهید)
+          git push origin main
