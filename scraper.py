@@ -29,8 +29,10 @@ def get_live_configs(channel_username):
         return configs
     except: return []
 
-channels = ['v2rayng_org', 'v2ray_alpha', 'VlessConfig']
+# تنظیمات کانال‌ها
+channels = ['v2rayng_org', 'v2ray_alpha', 'VlessConfig', 'FreeVlessConfig']
 all_raw = list(set(sum([get_live_configs(ch) for ch in channels], [])))
+print(f"Testing {len(all_raw)} configs...")
 valid_configs = [c for c in all_raw if check_connection(c)]
 
 categorized = {
@@ -41,11 +43,13 @@ categorized = {
     'ss': [c for c in valid_configs if c.startswith('ss')]
 }
 
+# ذخیره فایل‌های Base64 برای سابلینک
 for key, value in categorized.items():
     content = "\n".join(value)
     encoded = base64.b64encode(content.encode('utf-8')).decode('utf-8')
     with open(f'{key}_sub.txt', 'w') as f: f.write(encoded)
 
+# ذخیره آمار نهایی
 stats = {k: len(v) for k, v in categorized.items()}
 stats['last_update'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
 with open('info.json', 'w') as f: json.dump(stats, f)
