@@ -2,7 +2,7 @@ name: Auto Update VPN Sublink
 
 on:
   schedule:
-    - cron: '0 */6 * * *' # هر ۶ ساعت یکبار اجرا می‌شود
+    - cron: '0 */2 * * *' # هر ۶ ساعت یکبار اجرا می‌شود
   workflow_dispatch: # امکان اجرای دستی از تب Actions
 
 jobs:
