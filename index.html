@@ -9,68 +9,71 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&display=swap');
-        body { background-color: #0d1117; color: white; font-family: 'Vazirmatn', sans-serif; overflow-x: hidden; }
+        body { background-color: #0d1117; color: white; font-family: 'Vazirmatn', sans-serif; }
         .glass { background: rgba(22, 27, 34, 0.8); border: 1px solid rgba(255, 255, 255, 0.05); transition: 0.3s; }
-        .glass:hover { transform: translateY(-3px); border-color: rgba(255, 255, 255, 0.2); }
+        .glass:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+        .glow-blue:hover { border-color: #3b82f6; box-shadow: 0 0 15px rgba(59, 130, 246, 0.3); }
+        .glow-green:hover { border-color: #10b981; box-shadow: 0 0 15px rgba(16, 185, 129, 0.3); }
+        .glow-purple:hover { border-color: #a855f7; box-shadow: 0 0 15px rgba(168, 85, 247, 0.3); }
+        .glow-red:hover { border-color: #ef4444; box-shadow: 0 0 15px rgba(239, 68, 68, 0.3); }
+        .glow-yellow:hover { border-color: #f59e0b; box-shadow: 0 0 15px rgba(245, 158, 11, 0.3); }
     </style>
 </head>
 <body class="flex flex-col items-center p-4 md:p-10 min-h-screen">
     
-    <header class="text-center mt-6 mb-12 w-full">
-        <h1 class="text-4xl md:text-6xl font-black bg-gradient-to-r from-blue-500 via-purple-400 to-cyan-400 bg-clip-text text-transparent inline-block pb-2">
+    <header class="text-center mt-6 mb-12">
+        <h1 class="text-5xl md:text-7xl font-black bg-gradient-to-r from-blue-500 via-purple-400 to-cyan-400 bg-clip-text text-transparent pb-4">
             کانفیگ رایگان
         </h1>
-        <div class="flex items-center justify-center gap-2 mt-4 text-xs md:text-sm text-gray-400">
-            <span class="relative flex h-2 w-2"><span class="animate-ping absolute h-full w-full rounded-full bg-green-400 opacity-75"></span><span class="relative h-2 w-2 rounded-full bg-green-500"></span></span>
-            بروزرسانی زنده: <span id="last-update" class="text-blue-400 font-bold">...</span>
+        <div class="flex items-center justify-center gap-3 text-sm text-gray-400">
+            <span class="relative flex h-3 w-3"><span class="animate-ping absolute h-full w-full rounded-full bg-green-400 opacity-75"></span><span class="relative h-3 w-3 rounded-full bg-green-500"></span></span>
+            بروزرسانی زنده: <span id="last-update" class="text-blue-400 font-bold text-ltr">...</span>
         </div>
     </header>
 
-    <main class="w-full max-w-xl space-y-4">
-        <div onclick="copyLink('all_sub.txt')" class="glass rounded-2xl p-5 flex items-center justify-between cursor-pointer border-blue-500/20">
-            <span id="count-all" class="text-blue-400 text-xs bg-blue-500/10 px-2 py-1 rounded-lg">0</span>
-            <div class="flex items-center gap-4 font-bold">همه پروتکل‌ها <i class="fas fa-layer-group text-blue-500 text-xl"></i></div>
+    <main class="w-full max-w-xl space-y-5">
+        <div onclick="copyLink('all_sub.txt')" class="glass glow-blue rounded-3xl p-6 flex items-center justify-between cursor-pointer">
+            <span id="count-all" class="text-blue-400 text-xs bg-blue-500/10 px-3 py-1 rounded-full font-bold">...</span>
+            <div class="flex items-center gap-4 text-xl font-bold">همه پروتکل‌ها <i class="fas fa-layer-group text-blue-500"></i></div>
         </div>
 
-        <div onclick="copyLink('vless_sub.txt')" class="glass rounded-2xl p-5 flex items-center justify-between cursor-pointer border-green-500/20">
-            <span id="count-vless" class="text-green-400 text-xs bg-green-500/10 px-2 py-1 rounded-lg">0</span>
-            <div class="flex items-center gap-4 font-bold">پروتکل VLESS <i class="fas fa-shield-halved text-green-500 text-xl"></i></div>
+        <div onclick="copyLink('vless_sub.txt')" class="glass glow-green rounded-3xl p-6 flex items-center justify-between cursor-pointer">
+            <span id="count-vless" class="text-green-400 text-xs bg-green-500/10 px-3 py-1 rounded-full font-bold">...</span>
+            <div class="flex items-center gap-4 text-xl font-bold">پروتکل VLESS <i class="fas fa-shield-halved text-green-500"></i></div>
         </div>
 
-        <div onclick="copyLink('vmess_sub.txt')" class="glass rounded-2xl p-5 flex items-center justify-between cursor-pointer border-purple-500/20">
-            <span id="count-vmess" class="text-purple-400 text-xs bg-purple-500/10 px-2 py-1 rounded-lg">0</span>
-            <div class="flex items-center gap-4 font-bold">پروتکل VMESS <i class="fas fa-rocket text-purple-500 text-xl"></i></div>
+        <div onclick="copyLink('vmess_sub.txt')" class="glass glow-purple rounded-3xl p-6 flex items-center justify-between cursor-pointer">
+            <span id="count-vmess" class="text-purple-400 text-xs bg-purple-500/10 px-3 py-1 rounded-full font-bold">...</span>
+            <div class="flex items-center gap-4 text-xl font-bold">پروتکل VMESS <i class="fas fa-rocket text-purple-500"></i></div>
         </div>
 
-        <div onclick="copyLink('trojan_sub.txt')" class="glass rounded-2xl p-5 flex items-center justify-between cursor-pointer border-red-500/20">
-            <span id="count-trojan" class="text-red-400 text-xs bg-red-500/10 px-2 py-1 rounded-lg">0</span>
-            <div class="flex items-center gap-4 font-bold">پروتکل Trojan <i class="fas fa-user-secret text-red-500 text-xl"></i></div>
+        <div onclick="copyLink('trojan_sub.txt')" class="glass glow-red rounded-3xl p-6 flex items-center justify-between cursor-pointer">
+            <span id="count-trojan" class="text-red-400 text-xs bg-red-500/10 px-3 py-1 rounded-full font-bold">...</span>
+            <div class="flex items-center gap-4 text-xl font-bold">پروتکل Trojan <i class="fas fa-user-secret text-red-500"></i></div>
         </div>
 
-        <div onclick="copyLink('ss_sub.txt')" class="glass rounded-2xl p-5 flex items-center justify-between cursor-pointer border-yellow-500/20">
-            <span id="count-ss" class="text-yellow-400 text-xs bg-yellow-500/10 px-2 py-1 rounded-lg">0</span>
-            <div class="flex items-center gap-4 font-bold">پروتکل SS <i class="fas fa-key text-yellow-500 text-xl"></i></div>
+        <div onclick="copyLink('ss_sub.txt')" class="glass glow-yellow rounded-3xl p-6 flex items-center justify-between cursor-pointer">
+            <span id="count-ss" class="text-yellow-400 text-xs bg-yellow-500/10 px-3 py-1 rounded-full font-bold">...</span>
+            <div class="flex items-center gap-4 text-xl font-bold">پروتکل SS <i class="fas fa-key text-yellow-500"></i></div>
         </div>
     </main>
 
-    <footer class="mt-16 flex gap-8">
-        <a href="https://t.me/YOUR_ID" class="text-gray-500 hover:text-blue-400 transition-colors text-3xl"><i class="fab fa-telegram"></i></a>
-        <a href="https://instagram.com/YOUR_ID" class="text-gray-500 hover:text-pink-500 transition-colors text-3xl"><i class="fab fa-instagram"></i></a>
+    <footer class="mt-20 flex gap-10">
+        <a href="https://t.me/YOUR_ID" class="text-gray-500 hover:text-blue-400 text-4xl transition-all"><i class="fab fa-telegram"></i></a>
+        <a href="https://instagram.com/YOUR_ID" class="text-gray-500 hover:text-pink-500 text-4xl transition-all"><i class="fab fa-instagram"></i></a>
     </footer>
 
     <script>
         fetch('info.json').then(r => r.json()).then(data => {
             const keys = ['all', 'vless', 'vmess', 'trojan', 'ss'];
-            keys.forEach(k => {
-                if(data[k] !== undefined) document.getElementById(`count-${k}`).innerText = data[k] + " کانفیگ";
-            });
+            keys.forEach(k => { if(data[k] !== undefined) document.getElementById(`count-${k}`).innerText = data[k] + " کانفیگ"; });
             document.getElementById('last-update').innerText = data.last_update;
         });
 
         function copyLink(f) {
-            const rawUrl = `https://raw.githubusercontent.com/${window.location.pathname.split('/')[1]}/${window.location.pathname.split('/')[2]}/main/${f}`;
-            navigator.clipboard.writeText(rawUrl);
-            alert("لینک اشتراک کپی شد!");
+            const url = `https://raw.githubusercontent.com/${window.location.pathname.split('/')[1]}/${window.location.pathname.split('/')[2]}/main/${f}`;
+            navigator.clipboard.writeText(url);
+            alert("لینک کپی شد!");
         }
     </script>
 </body>
