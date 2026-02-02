@@ -1,27 +1,21 @@
 name: Auto Update Panel
-
 on:
-  schedule:
-    - cron: '0 */2 * * *'
+  schedule: [{cron: '0 */2 * * *'}]
   workflow_dispatch:
-
 permissions:
   contents: write
-
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
+        with: {python-version: '3.10'}
       - run: pip install requests beautifulsoup4
       - run: python scraper.py
-      - name: Commit and Push
-        run: |
+      - run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add *.txt info.json index.html icon.jpg
-          git commit -m "Manual Update: $(date)" || exit 0
+          git add *.txt info.json index.html
+          git commit -m "Auto Update" || exit 0
           git push origin main
