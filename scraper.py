@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import re
 import base64
+import json
 
 def get_live_configs(channel_username):
     url = f"https://t.me/s/{channel_username.replace('@', '')}"
@@ -22,7 +23,6 @@ def get_live_configs(channel_username):
 channels = ['v2rayng_org', 'v2ray_alpha', 'VlessConfig']
 all_configs = list(set(sum([get_live_configs(ch) for ch in channels], [])))
 
-# دسته‌بندی پروتکل‌ها
 categorized = {
     'all': all_configs,
     'vless': [c for c in all_configs if c.startswith('vless')],
@@ -30,9 +30,14 @@ categorized = {
     'trojan': [c for c in all_configs if c.startswith('trojan')]
 }
 
-# ذخیره هر دسته در فایل جداگانه (Base64)
+# ذخیره تعداد کانفیگ‌ها برای نمایش در سایت
+stats = {}
 for key, value in categorized.items():
+    stats[key] = len(value)
     content = "\n".join(value)
     encoded = base64.b64encode(content.encode('utf-8')).decode('utf-8')
     with open(f'{key}_sub.txt', 'w') as f:
         f.write(encoded)
+
+with open('info.json', 'w') as f:
+    json.dump(stats, f)
