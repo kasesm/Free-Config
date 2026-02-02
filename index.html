@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پنل اشتراک کانفیگ رایگان</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { background-color: #0b1120; color: #f8fafc; font-family: system-ui, -apple-system; }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        .glass-card:hover { border-color: #3b82f6; transform: translateY(-2px); }
+        .neon-green { border-color: #10b981; box-shadow: 0 0 10px rgba(16, 185, 129, 0.2); }
+        .neon-blue { border-color: #3b82f6; box-shadow: 0 0 10px rgba(59, 130, 246, 0.2); }
+    </style>
+</head>
+<body class="p-6 md:p-12">
+    <div class="max-w-2xl mx-auto">
+        <div class="flex items-center justify-between mb-10">
+            <h1 class="text-2xl font-bold flex items-center gap-2">
+                <i class="fas fa-server text-blue-500"></i> لینک‌های اشتراک
+            </h1>
+        </div>
+
+        <div class="glass-card neon-green rounded-2xl p-4 mb-4 flex items-center justify-between cursor-pointer" onclick="copyToClipboard('YOUR_RAW_URL_HERE/sub_link.txt')">
+            <div class="flex items-center gap-4">
+                <span class="text-xl text-gray-400">+</span>
+            </div>
+            <div class="flex items-center gap-3">
+                <span class="font-medium">تست شده (Ping & Speed)</span>
+                <i class="fas fa-check-double text-green-500"></i>
+            </div>
+        </div>
+
+        <div class="glass-card neon-blue rounded-2xl p-4 mb-4 flex items-center justify-between cursor-pointer" onclick="copyToClipboard('YOUR_RAW_URL_HERE/configs.txt')">
+            <div class="flex items-center gap-4">
+                <span class="text-xl text-gray-400">+</span>
+            </div>
+            <div class="flex items-center gap-3">
+                <span class="font-medium text-blue-100">میکس همه کانفیگ‌ها</span>
+                <i class="fas fa-layer-group text-blue-500"></i>
+            </div>
+        </div>
+
+        <p class="text-center text-sm text-gray-500 mt-10">برای کپی کردن لینک اشتراک، روی هر باکس کلیک کنید.</p>
+    </div>
+
+    <script>
+        function copyToClipboard(url) {
+            navigator.clipboard.writeText(url);
+            alert("لینک کپی شد!");
+        }
+    </script>
+</body>
+</html>
