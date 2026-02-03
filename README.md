@@ -38,7 +38,7 @@ https://raw.githubusercontent.com/kasesm/Free-Config/refs/heads/main/all_raw.txt
 
 برای دسترسی به پنل هوشمند و اطلاعات بیشتر:
 
-<a href="https://kasesm.github.io/free-config" target="_blank">🔗 ورود به پنل هوشمند</a>
+<a href="https://kasesm.github.io/Free-Config" target="_blank">🔗 ورود به پنل هوشمند</a>
 
 </details>
 
@@ -80,7 +80,7 @@ https://raw.githubusercontent.com/kasesm/Free-Config/refs/heads/main/all_raw.txt
 
 For access to the smart panel and more information:
 
-<a href="https://kasesm.github.io/free-config" target="_blank">🔗 Visit Smart Panel</a>
+<a href="https://kasesm.github.io/Free-Config" target="_blank">🔗 Visit Smart Panel</a>
 
 </details>
 
