@@ -15,4 +15,4 @@
 
 ### 🔹 VLESS
 ```text
-[https://raw.githubusercontent.com/kasesm/Free-Config/refs/heads/main/vless_raw.txt](https://raw.githubusercontent.com/kasesm/Free-Config/refs/heads/main/vless_raw.txt)
+https://raw.githubusercontent.com/kasesm/Free-Config/refs/heads/main/vless_raw.txt
