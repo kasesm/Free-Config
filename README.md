@@ -38,7 +38,7 @@ https://raw.githubusercontent.com/kasesm/Free-Config/refs/heads/main/all_raw.txt
 
 برای دسترسی به پنل هوشمند و اطلاعات بیشتر:
 ```
-[لینک وب‌سایت شما را اینجا قرار دهید]
+[https://kasesm.github.io/free-config]
 ```
 
 </details>
@@ -81,7 +81,7 @@ https://raw.githubusercontent.com/kasesm/Free-Config/refs/heads/main/all_raw.txt
 
 For access to the smart panel and more information:
 ```
-[Insert your website link here]
+[https://kasesm.github.io/free-config]
 ```
 
 </details>
