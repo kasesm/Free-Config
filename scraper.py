@@ -35,7 +35,7 @@ channels = [
     'hamedvpns', 'iphone02016vpn', 'irancpi_vpn', 'marambashi', 'merlinvpn', 
     'myporoxy', 'netaccount', 'persianvpnhub', 'pewezavpn', 'proxydaemi', 
     'proxyskull', 'rahgozar94725_ip', 'sinavm', 'soskeynet', 'tikvpnir', 
-    'v2freehub', 'wiki_tajrobe', 'xsfilternet', 'yebekhe'
+    'v2freehub', 'wiki_tajrobe', 'xsfilternet', 'yebekhe' , 'Persianvpnhub' , 'Cygag'
 ]
 
 all_raw = []
