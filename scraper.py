@@ -30,7 +30,7 @@ def get_live_configs(channel_username):
 
 # لیست کانال‌های شما
 channels = [
-    'Azadnet', 'AR1N24B', 'aristapnel', 'arshia_mod_fun', 'canfing_vpn', 
+    'Azadnet', 'AR14N24B', 'aristapnel', 'arshia_mod_fun', 'canfing_vpn', 
     'capoit', 'configfa', 'configraygan', 'fg_link', 'freenet_vt', 
     'hamedvpns', 'iphone02016vpn', 'irancpi_vpn', 'marambashi', 'merlinvpn', 
     'myporoxy', 'netaccount', 'persianvpnhub', 'pewezavpn', 'proxydaemi', 
