@@ -37,7 +37,7 @@ def get_live_configs(channel_username):
         return [conf for msg in messages for conf in extract_configs(msg.get_text())]
     except: return []
 
-# ۱. تفکیک منابع
+# لیست کانال‌ها
 high_volume_channel = 'filter_breaker'
 special_channel = 'isubvpn'
 normal_channels = [
@@ -55,24 +55,37 @@ normal_channels = [
     'prrofile_purple', 'v2_mod_shop', 'anty_filter', 'YamYamProxy', 'ettehad_vpn', 'DarkTeam_VPN', 'iran_v2ray1'
 ]
 
-# --- استخراج منبع پرحجم (HV) ---
+# --- شروع گزارش‌دهی در بخش Actions ---
+print(f"{'Channel Name':<25} | {'Count':<10}")
+print("-" * 40)
+
+# ۱. پردازش منبع حجیم (جداگانه)
 hv_configs = get_live_configs(high_volume_channel)
 hv_unique = list(set([c for c in hv_configs if len(c) > 30]))
 hv_final = [rename_config(c, i, "HV_Breaker") for i, c in enumerate(hv_unique, 1)]
+print(f"{high_volume_channel:<25} | {len(hv_final):<10} 🔥 (حجیم)")
 
-# --- استخراج سایر منابع ---
+# ۲. پردازش منبع ویژه (isubvpn)
 normal_all_raw = []
-# منبع ویژه
-for conf in list(set(get_live_configs(special_channel))):
-    if len(conf) > 30: normal_all_raw.append(rename_config(conf, len(normal_all_raw)+1, "Smart", True))
+special_raw = get_live_configs(special_channel)
+print(f"{special_channel:<25} | {len(special_raw):<10} ⭐ (ویژه)")
+for i, conf in enumerate(list(set(special_raw)), 1):
+    if len(conf) > 30:
+        normal_all_raw.append(rename_config(conf, len(normal_all_raw)+1, "Smart", True))
 
-# منابع عادی
+# ۳. پردازش سایر کانال‌ها
 for ch in normal_channels:
-    for conf in list(set(get_live_configs(ch))):
-        if len(conf) > 30: normal_all_raw.append(rename_config(conf, len(normal_all_raw)+1, "Smart", False))
+    configs = get_live_configs(ch)
+    count = len(configs)
+    print(f"{ch:<25} | {count:<10} {'✅' if count > 0 else '❌'}")
+    for conf in list(set(configs)):
+        if len(conf) > 30:
+            normal_all_raw.append(rename_config(conf, len(normal_all_raw)+1, "Smart", False))
     time.sleep(0.1)
 
-# دسته‌بندی و ذخیره
+print("-" * 40)
+
+# ذخیره‌سازی فایل‌ها
 normal_final = list(dict.fromkeys(normal_all_raw))
 categorized = {
     'all': normal_final,
@@ -82,19 +95,18 @@ categorized = {
     'ss': [c for c in normal_final if c.startswith('ss')]
 }
 
-# ذخیره فایل‌های عادی
 for key, value in categorized.items():
     with open(f'{key}_raw.txt', 'w', encoding='utf-8') as f: f.write("\n".join(value))
 
-# ذخیره فایل پرحجم (این خط بسیار مهم است)
+# ذخیره فایل حجیم
 with open('high_volume_raw.txt', 'w', encoding='utf-8') as f: f.write("\n".join(hv_final))
 
-# بروزرسانی info.json (این بخش برای نمایش عدد در سایت حیاتی است)
+# بروزرسانی info.json
 stats = {k: len(v) for k, v in categorized.items()}
-stats['hv_count'] = len(hv_final) # اضافه کردن آمار حجیم
+stats['hv_count'] = len(hv_final)
 stats['last_update'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
 
 with open('info.json', 'w', encoding='utf-8') as f:
     json.dump(stats, f, indent=4)
 
-print(f"Update Successful! HV: {len(hv_final)}, Normal: {len(normal_final)}")
+print(f"Update Successful! Total Normal: {len(normal_final)} | HV: {len(hv_final)}")
