@@ -10,27 +10,35 @@ def extract_configs(text):
     if not text: return []
     return re.findall(r'(?:vless|vmess|ss|trojan)://[^\s<>"]+', text)
 
-def rename_config(config, index, prefix="smart", is_special=False):
-    suffix = "_(ویژه)" if is_special else ""
-    new_name = f"@{prefix}_{index}{suffix}"
+def rename_config(config, index, is_special=False):
+    # نام پایه طبق خواسته شما
+    new_name = "@smartconfigs"
+    # اگر از کانال ویژه بود، تگ ویژه اضافه شود
+    if is_special:
+        new_name += "_(ویژه)"
+    
     try:
         if config.startswith('vmess://'):
             b64_part = config[8:]
+            # رفع مشکل Padding در Base64
             missing_padding = len(b64_part) % 4
             if missing_padding: b64_part += '=' * (4 - missing_padding)
+            
             data = json.loads(base64.b64decode(b64_part).decode('utf-8'))
-            data['ps'] = new_name
+            data['ps'] = new_name # تغییر نام در vmess
             return 'vmess://' + base64.b64encode(json.dumps(data).encode('utf-8')).decode('utf-8')
         else:
+            # برای vless, trojan, ss (تغییر نام بعد از هشتگ)
             base = config.split('#')[0]
             return f"{base}#{new_name}"
-    except: return config
+    except: 
+        return config
 
 def get_live_configs(channel_username):
     username = channel_username.replace('@', '').strip()
     url = f"https://t.me/s/{username}"
     headers = {'User-Agent': 'Mozilla/5.0'}
-    found_in_channel = []
+    found_configs = []
     try:
         response = requests.get(url, headers=headers, timeout=15)
         if response.status_code != 200: return []
@@ -39,10 +47,10 @@ def get_live_configs(channel_username):
         
         for msg in messages:
             text = msg.get_text()
-            # ۱. استخراج مستقیم از متن پیام
-            found_in_channel.extend(extract_configs(text))
+            # ۱. استخراج مستقیم از متن
+            found_configs.extend(extract_configs(text))
             
-            # ۲. بررسی لینک‌های داخل پیام برای فایل‌های txt یا سابلینک‌ها
+            # ۲. استخراج از لینک‌های سابلینک یا فایل txt داخل پیام
             links = re.findall(r'https?://[^\s<>"]+', text)
             for link in links:
                 if any(x in link.lower() for x in ['.txt', 'sub', 'githubusercontent', 'raw']):
@@ -50,14 +58,14 @@ def get_live_configs(channel_username):
                         res = requests.get(link, timeout=10)
                         if res.status_code == 200:
                             content = res.text
-                            # بررسی اگر محتوا Base64 بود آن را دیکود کند
+                            # بررسی اگر محتوا Base64 بود
                             try:
                                 decoded = base64.b64decode(content).decode('utf-8')
-                                found_in_channel.extend(extract_configs(decoded))
+                                found_configs.extend(extract_configs(decoded))
                             except:
-                                found_in_channel.extend(extract_configs(content))
+                                found_configs.extend(extract_configs(content))
                     except: continue
-        return found_in_channel
+        return found_configs
     except: return []
 
 # لیست کانال‌ها
@@ -78,32 +86,33 @@ normal_channels = [
     'prrofile_purple', 'v2_mod_shop', 'anty_filter', 'YamYamProxy', 'ettehad_vpn', 'DarkTeam_VPN', 'iran_v2ray1'
 ]
 
-# --- گزارش‌دهی در بخش Actions ---
 print(f"{'Channel Name':<25} | {'Count':<10}")
 print("-" * 40)
 
-# استخراج منبع حجیم (با قابلیت دانلود فایل)
-hv_configs = get_live_configs(high_volume_channel)
-hv_unique = list(set([c for c in hv_configs if len(c) > 30]))
-hv_final = [rename_config(c, i, "HV_Breaker") for i, c in enumerate(hv_unique, 1)]
-print(f"{high_volume_channel:<25} | {len(hv_final):<10} 🔥 (حجیم)")
+# ۱. پردازش منبع پرحجم
+hv_raw = get_live_configs(high_volume_channel)
+hv_unique = list(set([c for c in hv_raw if len(c) > 30]))
+hv_final = [rename_config(c, i, is_special=False) for i, c in enumerate(hv_unique, 1)]
+print(f"{high_volume_channel:<25} | {len(hv_final):<10} 🔥")
 
-# استخراج منبع ویژه
-normal_all_raw = []
+# ۲. پردازش منبع ویژه
 special_raw = get_live_configs(special_channel)
-print(f"{special_channel:<25} | {len(special_raw):<10} ⭐ (ویژه)")
-for i, conf in enumerate(list(set(special_raw)), 1):
-    if len(conf) > 30: normal_all_raw.append(rename_config(conf, len(normal_all_raw)+1, "Smart", True))
+special_final = [rename_config(c, i, is_special=True) for i, c in enumerate(list(set(special_raw)), 1) if len(c) > 30]
+print(f"{special_channel:<25} | {len(special_final):<10} ⭐")
 
-# سایر کانال‌ها
+# ۳. پردازش سایر کانال‌ها
+normal_all_raw = []
+normal_all_raw.extend(special_final) # اضافه کردن ویژه ها به لیست کل
+
 for ch in normal_channels:
     configs = get_live_configs(ch)
-    print(f"{ch:<25} | {len(configs):<10} {'✅' if len(configs) > 0 else '❌'}")
+    print(f"{ch:<25} | {len(configs):<10} ✅")
     for conf in list(set(configs)):
-        if len(conf) > 30: normal_all_raw.append(rename_config(conf, len(normal_all_raw)+1, "Smart", False))
+        if len(conf) > 30:
+            normal_all_raw.append(rename_config(conf, len(normal_all_raw)+1, is_special=False))
     time.sleep(0.1)
 
-# ذخیره فایل‌ها
+# ذخیره سازی
 normal_final = list(dict.fromkeys(normal_all_raw))
 categorized = {
     'all': normal_final,
@@ -118,9 +127,13 @@ for key, value in categorized.items():
 
 with open('high_volume_raw.txt', 'w', encoding='utf-8') as f: f.write("\n".join(hv_final))
 
+# بروزرسانی آمار
 stats = {k: len(v) for k, v in categorized.items()}
 stats['hv_count'] = len(hv_final)
 stats['last_update'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
 
 with open('info.json', 'w', encoding='utf-8') as f:
     json.dump(stats, f, indent=4)
+
+print("-" * 40)
+print("عملیات با موفقیت انجام شد و تمام نام‌ها به @smartconfigs تغییر یافت.")
