@@ -20,6 +20,7 @@
             --color-vmess: #a855f7;
             --color-trojan: #f43f5e;
             --color-ss: #10b981;
+            --color-hv: #ef4444; /* رنگ قرمز برای بخش حجیم */
         }
 
         .light-mode {
@@ -44,25 +45,19 @@
         }
 
         /* افکت‌های درخشش اختصاصی */
+        .card-hv:hover { box-shadow: 0 0 25px rgba(239, 68, 68, 0.5); border-color: var(--color-hv); transform: translateY(-4px); }
         .card-all:hover { box-shadow: 0 0 25px rgba(59, 130, 246, 0.5); border-color: var(--color-all); transform: translateY(-4px); }
         .card-vless:hover { box-shadow: 0 0 25px rgba(14, 165, 233, 0.5); border-color: var(--color-vless); transform: translateY(-4px); }
         .card-vmess:hover { box-shadow: 0 0 25px rgba(168, 85, 247, 0.5); border-color: var(--color-vmess); transform: translateY(-4px); }
         .card-trojan:hover { box-shadow: 0 0 25px rgba(244, 63, 94, 0.5); border-color: var(--color-trojan); transform: translateY(-4px); }
         .card-ss:hover { box-shadow: 0 0 25px rgba(16, 185, 129, 0.5); border-color: var(--color-ss); transform: translateY(-4px); }
 
+        .glow-text-hv { color: var(--color-hv); text-shadow: 0 0 10px rgba(239, 68, 68, 0.3); }
         .glow-text-all { color: var(--color-all); text-shadow: 0 0 10px rgba(59, 130, 246, 0.3); }
         
-        /* Social Icons Glow */
         .tg-hover:hover { color: #229ED9; filter: drop-shadow(0 0 10px #229ED9); }
         .gh-hover:hover { color: #ffffff; filter: drop-shadow(0 0 10px #ffffff); }
         .ig-hover:hover { color: #E1306C; filter: drop-shadow(0 0 10px #E1306C); }
-
-        .stat-badge {
-            background: rgba(59, 130, 246, 0.1);
-            padding: 4px 12px;
-            border-radius: 10px;
-            border: 1px solid rgba(59, 130, 246, 0.2);
-        }
     </style>
 </head>
 <body class="min-h-screen p-4 md:p-8 flex flex-col items-center">
@@ -82,9 +77,23 @@
 
     <main class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-6">
         
+        <div class="glass-card card-hv p-6 col-span-1 md:col-span-2 flex flex-col md:flex-row justify-between items-center gap-6 border-r-4 border-red-500 bg-red-500/5">
+            <div class="text-center md:text-right">
+                <div class="flex items-center gap-2 mb-1 justify-center md:justify-start">
+                    <i class="fas fa-fire text-red-500"></i>
+                    <h2 class="text-lg font-bold text-gray-300">منبع فوق پرحجم (Filter_Breaker)</h2>
+                </div>
+                <p id="count-hv" class="text-5xl font-black glow-text-hv">---</p>
+                <p class="text-gray-500 text-xs mt-2">به دلیل حجم بالا در سابلینک All قرار ندارد</p>
+            </div>
+            <button onclick="copyLink('high_volume_raw.txt')" class="bg-red-600 hover:bg-red-700 px-10 py-4 rounded-2xl font-bold transition-all flex items-center gap-3 shadow-lg shadow-red-900/20">
+                <i class="fas fa-copy text-xl"></i> کپی سابلینک ۱۷ هزارتایی
+            </button>
+        </div>
+
         <div class="glass-card card-all p-6 col-span-1 md:col-span-2 flex flex-col md:flex-row justify-between items-center gap-6 border-r-4 border-blue-500">
             <div class="text-center md:text-right">
-                <h2 class="text-xl font-bold mb-2 text-gray-300">مجموع کل کانفیگ‌ها</h2>
+                <h2 class="text-xl font-bold mb-2 text-gray-300">مجموع کل کانفیگ‌ها (عادی)</h2>
                 <p id="count-all" class="text-5xl font-black glow-text-all">---</p>
             </div>
             <button onclick="copyLink('all_raw.txt')" class="bg-blue-600 hover:bg-blue-700 px-10 py-4 rounded-2xl font-bold transition-all flex items-center gap-3 shadow-lg">
@@ -114,7 +123,6 @@
     </main>
 
     <footer class="mt-20 w-full max-w-4xl flex flex-col items-center gap-12 pb-16">
-        
         <div class="glass-card p-8 w-full flex flex-col md:flex-row justify-around items-center gap-8 border-b-2 border-blue-500/20">
             <div class="flex flex-col items-center gap-2">
                 <i class="fas fa-chart-line text-blue-400 text-2xl"></i>
@@ -144,16 +152,18 @@
     </footer>
 
     <script>
-        // Fetch Data from info.json
         fetch('info.json').then(r => r.json()).then(data => {
             ['all', 'vless', 'vmess', 'trojan', 'ss'].forEach(k => {
                 const el = document.getElementById(`count-${k}`);
                 if(el) el.innerText = (data[k] || 0).toLocaleString('fa-IR') + " کانفیگ";
             });
+            // نمایش آمار بخش حجیم
+            const hvEl = document.getElementById('count-hv');
+            if(hvEl) hvEl.innerText = (data.hv_count || 0).toLocaleString('fa-IR') + " کانفیگ";
+            
             document.getElementById('last-update').innerText = data.last_update;
         });
 
-        // Copy Function with Feedback
         function copyLink(f) {
             const url = `https://raw.githubusercontent.com/kasesm/Free-Config/main/${f}`;
             navigator.clipboard.writeText(url).then(() => {
@@ -165,7 +175,6 @@
             });
         }
 
-        // Theme Switcher
         function toggleTheme() {
             document.body.classList.toggle('light-mode');
             const icon = document.getElementById('theme-icon');
