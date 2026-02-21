@@ -30,11 +30,34 @@ def get_live_configs(channel_username):
     username = channel_username.replace('@', '').strip()
     url = f"https://t.me/s/{username}"
     headers = {'User-Agent': 'Mozilla/5.0'}
+    found_in_channel = []
     try:
         response = requests.get(url, headers=headers, timeout=15)
+        if response.status_code != 200: return []
         soup = BeautifulSoup(response.text, 'html.parser')
         messages = soup.find_all('div', class_='tgme_widget_message_text')
-        return [conf for msg in messages for conf in extract_configs(msg.get_text())]
+        
+        for msg in messages:
+            text = msg.get_text()
+            # ۱. استخراج مستقیم از متن پیام
+            found_in_channel.extend(extract_configs(text))
+            
+            # ۲. بررسی لینک‌های داخل پیام برای فایل‌های txt یا سابلینک‌ها
+            links = re.findall(r'https?://[^\s<>"]+', text)
+            for link in links:
+                if any(x in link.lower() for x in ['.txt', 'sub', 'githubusercontent', 'raw']):
+                    try:
+                        res = requests.get(link, timeout=10)
+                        if res.status_code == 200:
+                            content = res.text
+                            # بررسی اگر محتوا Base64 بود آن را دیکود کند
+                            try:
+                                decoded = base64.b64decode(content).decode('utf-8')
+                                found_in_channel.extend(extract_configs(decoded))
+                            except:
+                                found_in_channel.extend(extract_configs(content))
+                    except: continue
+        return found_in_channel
     except: return []
 
 # لیست کانال‌ها
@@ -55,37 +78,32 @@ normal_channels = [
     'prrofile_purple', 'v2_mod_shop', 'anty_filter', 'YamYamProxy', 'ettehad_vpn', 'DarkTeam_VPN', 'iran_v2ray1'
 ]
 
-# --- شروع گزارش‌دهی در بخش Actions ---
+# --- گزارش‌دهی در بخش Actions ---
 print(f"{'Channel Name':<25} | {'Count':<10}")
 print("-" * 40)
 
-# ۱. پردازش منبع حجیم (جداگانه)
+# استخراج منبع حجیم (با قابلیت دانلود فایل)
 hv_configs = get_live_configs(high_volume_channel)
 hv_unique = list(set([c for c in hv_configs if len(c) > 30]))
 hv_final = [rename_config(c, i, "HV_Breaker") for i, c in enumerate(hv_unique, 1)]
 print(f"{high_volume_channel:<25} | {len(hv_final):<10} 🔥 (حجیم)")
 
-# ۲. پردازش منبع ویژه (isubvpn)
+# استخراج منبع ویژه
 normal_all_raw = []
 special_raw = get_live_configs(special_channel)
 print(f"{special_channel:<25} | {len(special_raw):<10} ⭐ (ویژه)")
 for i, conf in enumerate(list(set(special_raw)), 1):
-    if len(conf) > 30:
-        normal_all_raw.append(rename_config(conf, len(normal_all_raw)+1, "Smart", True))
+    if len(conf) > 30: normal_all_raw.append(rename_config(conf, len(normal_all_raw)+1, "Smart", True))
 
-# ۳. پردازش سایر کانال‌ها
+# سایر کانال‌ها
 for ch in normal_channels:
     configs = get_live_configs(ch)
-    count = len(configs)
-    print(f"{ch:<25} | {count:<10} {'✅' if count > 0 else '❌'}")
+    print(f"{ch:<25} | {len(configs):<10} {'✅' if len(configs) > 0 else '❌'}")
     for conf in list(set(configs)):
-        if len(conf) > 30:
-            normal_all_raw.append(rename_config(conf, len(normal_all_raw)+1, "Smart", False))
+        if len(conf) > 30: normal_all_raw.append(rename_config(conf, len(normal_all_raw)+1, "Smart", False))
     time.sleep(0.1)
 
-print("-" * 40)
-
-# ذخیره‌سازی فایل‌ها
+# ذخیره فایل‌ها
 normal_final = list(dict.fromkeys(normal_all_raw))
 categorized = {
     'all': normal_final,
@@ -98,15 +116,11 @@ categorized = {
 for key, value in categorized.items():
     with open(f'{key}_raw.txt', 'w', encoding='utf-8') as f: f.write("\n".join(value))
 
-# ذخیره فایل حجیم
 with open('high_volume_raw.txt', 'w', encoding='utf-8') as f: f.write("\n".join(hv_final))
 
-# بروزرسانی info.json
 stats = {k: len(v) for k, v in categorized.items()}
 stats['hv_count'] = len(hv_final)
 stats['last_update'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
 
 with open('info.json', 'w', encoding='utf-8') as f:
     json.dump(stats, f, indent=4)
-
-print(f"Update Successful! Total Normal: {len(normal_final)} | HV: {len(hv_final)}")
