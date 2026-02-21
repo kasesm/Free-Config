@@ -13,7 +13,7 @@
         :root {
             --bg-color: #0d1117;
             --text-color: #ffffff;
-            --card-bg: rgba(22, 27, 34, 0.8);
+            --card-bg: rgba(22, 27, 34, 0.85);
             --color-hv: #ef4444;
             --color-all: #3b82f6;
             --color-vless: #0ea5e9;
@@ -37,34 +37,50 @@
 
         .glass-card {
             background: var(--card-bg);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 24px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(14px);
+            border-radius: 26px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* افکت درخشش (Glow) برای باکس‌های عریض */
-        .card-hv:hover { box-shadow: 0 0 30px rgba(239, 68, 68, 0.4); border-color: var(--color-hv); transform: translateY(-4px); }
-        .card-all:hover { box-shadow: 0 0 30px rgba(59, 130, 246, 0.4); border-color: var(--color-all); transform: translateY(-4px); }
-        
-        /* افکت درخشش برای باکس‌های کوچک */
-        .card-small:hover { transform: translateY(-4px); }
-        .card-vless:hover { box-shadow: 0 0 20px rgba(14, 165, 233, 0.4); border-color: var(--color-vless); }
-        .card-vmess:hover { box-shadow: 0 0 20px rgba(168, 85, 247, 0.4); border-color: var(--color-vmess); }
-        .card-trojan:hover { box-shadow: 0 0 20px rgba(244, 63, 94, 0.4); border-color: var(--color-trojan); }
-        .card-ss:hover { box-shadow: 0 0 20px rgba(16, 185, 129, 0.4); border-color: var(--color-ss); }
+        /* حاشیه نازک دور باکس‌ها و افکت گلوینگ تشدید شده */
+        .card-hv { border: 1px solid rgba(239, 68, 68, 0.3); }
+        .card-hv:hover { 
+            border-color: var(--color-hv); 
+            box-shadow: 0 0 35px rgba(239, 68, 68, 0.5), inset 0 0 15px rgba(239, 68, 68, 0.2);
+            transform: translateY(-6px);
+        }
 
-        /* Social Icons Glow Effect */
-        .tg-hover:hover { color: #229ED9; filter: drop-shadow(0 0 10px #229ED9); transform: scale(1.2); }
-        .gh-hover:hover { color: #ffffff; filter: drop-shadow(0 0 10px #ffffff); transform: scale(1.2); }
-        .ig-hover:hover { color: #E1306C; filter: drop-shadow(0 0 10px #E1306C); transform: scale(1.2); }
+        .card-all { border: 1px solid rgba(59, 130, 246, 0.3); }
+        .card-all:hover { 
+            border-color: var(--color-all); 
+            box-shadow: 0 0 35px rgba(59, 130, 246, 0.5), inset 0 0 15px rgba(59, 130, 246, 0.2);
+            transform: translateY(-6px);
+        }
 
-        .glow-text-all { color: var(--color-all); text-shadow: 0 0 10px rgba(59, 130, 246, 0.5); }
-        .glow-text-hv { color: var(--color-hv); text-shadow: 0 0 10px rgba(239, 68, 68, 0.5); }
+        .card-small { border-width: 1px; }
+        .card-vless { border-color: rgba(14, 165, 233, 0.3); }
+        .card-vless:hover { border-color: var(--color-vless); box-shadow: 0 0 25px rgba(14, 165, 233, 0.5); transform: translateY(-5px); }
+
+        .card-vmess { border-color: rgba(168, 85, 247, 0.3); }
+        .card-vmess:hover { border-color: var(--color-vmess); box-shadow: 0 0 25px rgba(168, 85, 247, 0.5); transform: translateY(-5px); }
+
+        .card-trojan { border-color: rgba(244, 63, 94, 0.3); }
+        .card-trojan:hover { border-color: var(--color-trojan); box-shadow: 0 0 25px rgba(244, 63, 94, 0.5); transform: translateY(-5px); }
+
+        .card-ss { border-color: rgba(16, 185, 129, 0.3); }
+        .card-ss:hover { border-color: var(--color-ss); box-shadow: 0 0 25px rgba(16, 185, 129, 0.5); transform: translateY(-5px); }
+
+        /* Social Icons Glow */
+        .tg-hover:hover { color: #229ED9; filter: drop-shadow(0 0 15px #229ED9); transform: scale(1.2); }
+        .gh-hover:hover { color: #ffffff; filter: drop-shadow(0 0 15px #ffffff); transform: scale(1.2); }
+        .ig-hover:hover { color: #E1306C; filter: drop-shadow(0 0 15px #E1306C); transform: scale(1.2); }
+
+        .glow-text-all { color: var(--color-all); text-shadow: 0 0 15px rgba(59, 130, 246, 0.6); }
+        .glow-text-hv { color: var(--color-hv); text-shadow: 0 0 15px rgba(239, 68, 68, 0.6); }
         
         .icon-container {
             width: 60px; height: 60px;
-            display: flex; items-center: center; justify-content: center;
+            display: flex; align-items: center; justify-content: center;
             border-radius: 18px;
         }
     </style>
@@ -75,48 +91,48 @@
         <div class="flex items-center gap-4">
             <img src="icon.jpg" class="w-16 h-16 rounded-2xl shadow-lg border-2 border-blue-500" alt="Logo">
             <div>
-                <h1 class="text-2xl font-black">پنل هوشمند کانفیگ</h1>
-                <p class="text-gray-400 text-sm">بروزرسانی خودکار هر ۲ ساعت</p>
+                <h1 class="text-2xl font-black tracking-tight">پنل هوشمند کانفیگ</h1>
+                <p class="text-gray-400 text-sm">بروزرسانی خودکار هوشمند</p>
             </div>
         </div>
-        <button onclick="toggleTheme()" class="w-12 h-12 glass-card flex items-center justify-center text-xl hover:scale-110 transition-all">
+        <button onclick="toggleTheme()" class="w-12 h-12 glass-card flex items-center justify-center text-xl hover:scale-110 transition-all border border-white/10">
             <i id="theme-icon" class="fas fa-moon text-blue-500"></i>
         </button>
     </header>
 
     <main class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-6">
         
-        <div class="glass-card card-hv p-6 col-span-1 md:col-span-2 flex flex-col md:flex-row justify-between items-center gap-6 border-r-4 border-red-500">
+        <div class="glass-card card-hv p-7 col-span-1 md:col-span-2 flex flex-col md:flex-row justify-between items-center gap-6">
             <div class="flex items-center gap-5 w-full md:w-auto">
-                <div class="icon-container bg-red-500/10 text-red-500 text-3xl shadow-inner">
-                    <i class="fas fa-fire"></i>
+                <div class="icon-container bg-red-500/10 text-red-500 text-3xl shadow-[inset_0_0_10px_rgba(239,68,68,0.2)]">
+                    <i class="fas fa-fire animate-pulse"></i>
                 </div>
                 <div class="text-right">
-                    <h2 class="text-lg font-bold text-gray-300">منبع فوق پرحجم (Filter_Breaker)</h2>
+                    <h2 class="text-lg font-bold text-gray-300">منبع فوق پرحجم (HV)</h2>
                     <p id="count-hv" class="text-4xl font-black glow-text-hv">---</p>
                 </div>
             </div>
-            <button onclick="copyLink('high_volume_raw.txt')" class="w-full md:w-auto bg-red-600 hover:bg-red-700 px-8 py-4 rounded-2xl font-bold transition-all flex items-center justify-center gap-3 shadow-lg">
-                <i class="fas fa-copy"></i> کپی سابلینک ۱۷ هزارتایی
+            <button onclick="copyLink('high_volume_raw.txt')" class="w-full md:w-auto bg-red-600 hover:bg-red-700 px-10 py-4 rounded-2xl font-black transition-all flex items-center justify-center gap-3 shadow-lg shadow-red-600/20">
+                <i class="fas fa-bolt"></i> کپی لینک ۱۷,۰۰۰ تایی
             </button>
         </div>
 
-        <div class="glass-card card-all p-6 col-span-1 md:col-span-2 flex flex-col md:flex-row justify-between items-center gap-6 border-r-4 border-blue-500">
+        <div class="glass-card card-all p-7 col-span-1 md:col-span-2 flex flex-col md:flex-row justify-between items-center gap-6">
             <div class="flex items-center gap-5 w-full md:w-auto">
-                <div class="icon-container bg-blue-500/10 text-blue-500 text-3xl shadow-inner">
+                <div class="icon-container bg-blue-500/10 text-blue-500 text-3xl shadow-[inset_0_0_10px_rgba(59,130,246,0.2)]">
                     <i class="fas fa-layer-group"></i>
                 </div>
                 <div class="text-right">
-                    <h2 class="text-lg font-bold text-gray-300">مجموع کل کانفیگ‌ها (عادی)</h2>
+                    <h2 class="text-lg font-bold text-gray-300">مجموع کل کانفیگ‌ها (هوشمند)</h2>
                     <p id="count-all" class="text-4xl font-black glow-text-all">---</p>
                 </div>
             </div>
-            <button onclick="copyLink('all_raw.txt')" class="w-full md:w-auto bg-blue-600 hover:bg-blue-700 px-8 py-4 rounded-2xl font-bold transition-all flex items-center justify-center gap-3 shadow-lg">
-                <i class="fas fa-copy"></i> کپی سابلینک هوشمند
+            <button onclick="copyLink('all_raw.txt')" class="w-full md:w-auto bg-blue-600 hover:bg-blue-700 px-10 py-4 rounded-2xl font-black transition-all flex items-center justify-center gap-3 shadow-lg shadow-blue-600/20">
+                <i class="fas fa-copy"></i> کپی سابلینک کامل
             </button>
         </div>
 
-        <div class="glass-card card-small card-vless p-6 flex justify-between items-center border-r-4 border-sky-500">
+        <div class="glass-card card-small card-vless p-6 flex justify-between items-center">
             <div class="flex items-center gap-4">
                 <i class="fas fa-shield-halved text-sky-500 text-2xl w-8 text-center"></i>
                 <div><p class="text-gray-400 text-xs">VLESS</p><p id="count-vless" class="text-xl font-bold text-sky-500">--</p></div>
@@ -124,7 +140,7 @@
             <button onclick="copyLink('vless_raw.txt')" class="text-sky-400 hover:bg-sky-500/10 p-3 rounded-xl transition-all"><i class="fas fa-link text-xl"></i></button>
         </div>
 
-        <div class="glass-card card-small card-vmess p-6 flex justify-between items-center border-r-4 border-purple-500">
+        <div class="glass-card card-small card-vmess p-6 flex justify-between items-center">
             <div class="flex items-center gap-4">
                 <i class="fas fa-infinity text-purple-500 text-2xl w-8 text-center"></i>
                 <div><p class="text-gray-400 text-xs">VMess</p><p id="count-vmess" class="text-xl font-bold text-purple-500">--</p></div>
@@ -132,7 +148,7 @@
             <button onclick="copyLink('vmess_raw.txt')" class="text-purple-400 hover:bg-purple-500/10 p-3 rounded-xl transition-all"><i class="fas fa-link text-xl"></i></button>
         </div>
 
-        <div class="glass-card card-small card-trojan p-6 flex justify-between items-center border-r-4 border-rose-500">
+        <div class="glass-card card-small card-trojan p-6 flex justify-between items-center">
             <div class="flex items-center gap-4">
                 <i class="fas fa-horse-head text-rose-500 text-2xl w-8 text-center"></i>
                 <div><p class="text-gray-400 text-xs">Trojan</p><p id="count-trojan" class="text-xl font-bold text-rose-500">--</p></div>
@@ -140,7 +156,7 @@
             <button onclick="copyLink('trojan_raw.txt')" class="text-rose-400 hover:bg-rose-500/10 p-3 rounded-xl transition-all"><i class="fas fa-link text-xl"></i></button>
         </div>
 
-        <div class="glass-card card-small card-ss p-6 flex justify-between items-center border-r-4 border-emerald-500">
+        <div class="glass-card card-small card-ss p-6 flex justify-between items-center">
             <div class="flex items-center gap-4">
                 <i class="fas fa-paper-plane text-emerald-500 text-2xl w-8 text-center"></i>
                 <div><p class="text-gray-400 text-xs">Shadowsocks</p><p id="count-ss" class="text-xl font-bold text-emerald-500">--</p></div>
@@ -150,12 +166,12 @@
     </main>
 
     <footer class="mt-16 w-full max-w-4xl flex flex-col items-center gap-8 pb-12">
-        <div class="glass-card p-8 w-full flex flex-col md:flex-row justify-around items-center gap-8 border-b-2 border-blue-500/20">
+        <div class="glass-card p-8 w-full flex flex-col md:flex-row justify-around items-center gap-8 border-b-2 border-blue-500/30">
             <div class="flex flex-col items-center gap-3">
                 <span class="text-gray-500 text-xs font-bold uppercase tracking-widest">بازدید امروز</span>
                 <img src="https://count.getloli.com/get/@smartconfigs_daily?theme=rule73" alt="Daily View" />
             </div>
-            <div class="hidden md:block w-px h-16 bg-gray-800/50"></div>
+            <div class="hidden md:block w-px h-16 bg-gray-800"></div>
             <div class="flex flex-col items-center gap-3">
                 <span class="text-gray-500 text-xs font-bold uppercase tracking-widest">بازدید کل سایت</span>
                 <img src="https://count.getloli.com/get/@smartconfigs_total?theme=rule73" alt="Total View" />
@@ -169,15 +185,14 @@
                 <a href="https://www.instagram.com/_demonedge_/" target="_blank" class="text-gray-500 text-5xl transition-all ig-hover"><i class="fab fa-instagram"></i></a>
             </div>
             
-            <div class="text-center bg-gray-900/40 px-8 py-3 rounded-full border border-gray-800 shadow-xl">
-                <p class="text-gray-500 text-[10px] mb-1 tracking-widest">LAST UPDATED</p>
+            <div class="text-center bg-black/40 px-8 py-3 rounded-full border border-white/5 shadow-2xl">
+                <p class="text-gray-500 text-[10px] mb-1 tracking-tighter uppercase">Last Successful Sync</p>
                 <p id="last-update" class="text-blue-500 font-bold text-sm">---</p>
             </div>
         </div>
     </footer>
 
     <script>
-        // دریافت داده‌ها از فایل JSON
         fetch('info.json').then(r => r.json()).then(data => {
             ['all', 'vless', 'vmess', 'trojan', 'ss'].forEach(k => {
                 const el = document.getElementById(`count-${k}`);
@@ -186,25 +201,20 @@
             const hvEl = document.getElementById('count-hv');
             if(hvEl) hvEl.innerText = (data.hv_count || 0).toLocaleString('fa-IR') + " کانفیگ";
             document.getElementById('last-update').innerText = data.last_update;
-        }).catch(err => console.log("Error loading stats"));
+        });
 
-        // تابع کپی لینک
         function copyLink(f) {
             const url = `https://raw.githubusercontent.com/kasesm/Free-Config/main/${f}`;
             navigator.clipboard.writeText(url).then(() => {
-                alert("ساب‌لینک با موفقیت کپی شد!");
+                alert("ساب‌لینک با موفقیت کپی شد! ✅");
             });
         }
 
-        // تغییر تم لایت و دارک
         function toggleTheme() {
             document.body.classList.toggle('light-mode');
             const icon = document.getElementById('theme-icon');
-            if(document.body.classList.contains('light-mode')) {
-                icon.classList.replace('fa-moon', 'fa-sun');
-            } else {
-                icon.classList.replace('fa-sun', 'fa-moon');
-            }
+            icon.classList.toggle('fa-moon');
+            icon.classList.toggle('fa-sun');
         }
     </script>
 </body>
