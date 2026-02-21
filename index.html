@@ -3,49 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>پنل هوشمند کانفیگ</title>
+    <title>پنل هوشمند کانفیگ رایگان</title>
+    <link rel="icon" type="image/jpeg" href="icon.jpg">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&display=swap');
-        body { background-color: #0d1117; color: white; font-family: 'Vazirmatn'; }
-        .glass-card { background: rgba(22, 27, 34, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; }
+        
+        :root {
+            --bg-color: #0d1117;
+            --text-color: #ffffff;
+            --card-bg: rgba(22, 27, 34, 0.8);
+            --accent-color: #3b82f6;
+        }
+
+        .light-mode {
+            --bg-color: #f0f2f5;
+            --text-color: #1a1a1a;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --accent-color: #2563eb;
+        }
+
+        body { 
+            background-color: var(--bg-color); 
+            color: var(--text-color); 
+            font-family: 'Vazirmatn', sans-serif; 
+            transition: all 0.4s; 
+        }
+
+        .glass-card { 
+            background: var(--card-bg); 
+            backdrop-filter: blur(10px); 
+            border: 1px solid rgba(255,255,255,0.1); 
+            border-radius: 20px; 
+        }
+
+        .hv-card {
+            border: 2px solid #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .btn-copy {
+            transition: all 0.3s;
+        }
+        .btn-copy:active { transform: scale(0.9); }
     </style>
 </head>
-<body class="p-6 flex flex-col items-center">
+<body class="p-6 flex flex-col items-center min-h-screen">
+
+    <div class="w-full max-w-4xl flex justify-end mb-4">
+        <button onclick="toggleTheme()" class="glass-card p-3 w-12 h-12 flex items-center justify-center">
+            <i id="theme-icon" class="fas fa-moon text-xl"></i>
+        </button>
+    </div>
 
     <header class="mb-10 text-center">
-        <h1 class="text-3xl font-black text-blue-500 mb-2">پنل هوشمند کانفیگ</h1>
-        <p id="last-update" class="text-gray-500 text-sm">بروزرسانی: در حال بارگذاری...</p>
+        <h1 class="text-4xl font-black text-blue-500 mb-2">پنل هوشمند @smartconfigs</h1>
+        <p class="text-gray-500 text-sm">بروزرسانی: <span id="last-update">...</span></p>
     </header>
 
     <main class="w-full max-w-4xl space-y-6">
-        <div class="glass-card border-2 border-red-500 p-8 bg-red-500/5">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-xl font-black text-red-500"><i class="fas fa-bolt ml-2"></i> منبع ۱۷ هزارتایی (Filter Breaker)</h2>
-                <span id="count-hv" class="bg-red-500 px-3 py-1 rounded-full text-sm font-bold">0</span>
+
+        <div class="glass-card hv-card p-6 relative overflow-hidden">
+            <div class="flex justify-between items-center relative z-10">
+                <div class="flex items-center gap-4">
+                    <div class="bg-red-500 p-3 rounded-lg text-white shadow-lg shadow-red-500/50">
+                        <i class="fas fa-fire-alt text-2xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-black text-red-500">منبع فوق پرحجم (۱۷ هزار+)</h2>
+                        <p class="text-gray-400 text-xs mt-1">کانفیگ‌های اختصاصی Filter_breaker (جدا از لیست All)</p>
+                    </div>
+                </div>
+                <div class="text-left">
+                    <span id="count-hv" class="block text-2xl font-black text-red-500">0</span>
+                    <button onclick="copyLink('high_volume_raw.txt')" class="mt-2 text-red-500 hover:text-red-400 text-3xl btn-copy">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                </div>
             </div>
-            <button onclick="copyLink('high_volume_raw.txt')" class="w-full bg-red-600 hover:bg-red-700 py-3 rounded-xl font-bold transition-all">کپی سابلینک سنگین</button>
         </div>
 
-        <div class="glass-card p-6 flex justify-between items-center border-r-4 border-blue-500">
-            <div><p class="text-gray-400 text-xs">سابلینک اصلی (شامل کانفیگ‌های ویژه)</p><p id="count-all" class="text-xl font-bold">...</p></div>
-            <button onclick="copyLink('all_raw.txt')" class="text-blue-500 text-3xl"><i class="fas fa-copy"></i></button>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="glass-card p-6 flex justify-between items-center border-r-4 border-blue-500">
+                <div>
+                    <p class="text-gray-400 text-xs">همه کانفیگ‌ها (عادی)</p>
+                    <p id="count-all" class="text-2xl font-black mt-1">0 مورد</p>
+                </div>
+                <button onclick="copyLink('all_raw.txt')" class="text-blue-500 text-3xl btn-copy"><i class="fas fa-link"></i></button>
+            </div>
+
+            <div class="glass-card p-6 flex justify-between items-center border-r-4 border-purple-500">
+                <div>
+                    <p class="text-gray-400 text-xs">پروتکل VLESS</p>
+                    <p id="count-vless" class="text-2xl font-black mt-1">0 مورد</p>
+                </div>
+                <button onclick="copyLink('vless_raw.txt')" class="text-purple-500 text-3xl btn-copy"><i class="fas fa-link"></i></button>
+            </div>
         </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="glass-card p-6 flex justify-between items-center border-r-4 border-orange-500">
+                <div>
+                    <p class="text-gray-400 text-xs">پروتکل VMess</p>
+                    <p id="count-vmess" class="text-2xl font-black mt-1">0 مورد</p>
+                </div>
+                <button onclick="copyLink('vmess_raw.txt')" class="text-orange-500 text-3xl btn-copy"><i class="fas fa-link"></i></button>
+            </div>
+
+            <div class="glass-card p-6 flex justify-between items-center border-r-4 border-green-500">
+                <div>
+                    <p class="text-gray-400 text-xs">پروتکل Trojan</p>
+                    <p id="count-trojan" class="text-2xl font-black mt-1">0 مورد</p>
+                </div>
+                <button onclick="copyLink('trojan_raw.txt')" class="text-green-500 text-3xl btn-copy"><i class="fas fa-link"></i></button>
+            </div>
+        </div>
+
     </main>
 
+    <footer class="mt-12 text-center text-gray-500">
+        <p class="text-sm">طراحی شده برای @smartconfigs</p>
+    </footer>
+
     <script>
+        // دریافت آمار از info.json
         fetch('info.json').then(r => r.json()).then(data => {
+            const keys = ['all', 'vless', 'vmess', 'trojan', 'ss'];
+            keys.forEach(k => { 
+                if(data[k] !== undefined) document.getElementById(`count-${k}`).innerText = data[k] + " مورد"; 
+            });
             document.getElementById('count-hv').innerText = data.hv_count;
-            document.getElementById('count-all').innerText = data.all + " مورد";
-            document.getElementById('last-update').innerText = "آخرین بروزرسانی: " + data.last_update;
+            document.getElementById('last-update').innerText = data.last_update;
         });
 
+        // تابع کپی لینک
         function copyLink(f) {
             const user = window.location.hostname.split('.')[0];
             const repo = "Free-Config"; 
             const url = `https://raw.githubusercontent.com/${user}/${repo}/main/${f}`;
-            navigator.clipboard.writeText(url).then(() => alert("کپی شد!"));
+            navigator.clipboard.writeText(url).then(() => {
+                alert("لینک با موفقیت کپی شد!");
+            });
+        }
+
+        // تغییر تم (لایت/دارک)
+        function toggleTheme() {
+            const body = document.body;
+            const icon = document.getElementById('theme-icon');
+            body.classList.toggle('light-mode');
+            if(body.classList.contains('light-mode')) {
+                icon.classList.replace('fa-moon', 'fa-sun');
+            } else {
+                icon.classList.replace('fa-sun', 'fa-moon');
+            }
         }
     </script>
 </body>
