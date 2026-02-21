@@ -14,7 +14,12 @@
             --bg-color: #0d1117;
             --text-color: #ffffff;
             --card-bg: rgba(22, 27, 34, 0.8);
-            --accent: #3b82f6; /* رنگ آبی اصلی */
+            /* رنگ‌های اختصاصی */
+            --color-all: #3b82f6;    /* آبی */
+            --color-vless: #0ea5e9;  /* آسمانی */
+            --color-vmess: #a855f7;  /* بنفش */
+            --color-trojan: #f43f5e; /* قرمز */
+            --color-ss: #10b981;     /* سبز */
         }
 
         .light-mode {
@@ -30,142 +35,118 @@
             transition: 0.4s;
         }
 
-        /* استایل کارت‌های شیشه‌ای */
         .glass-card {
             background: var(--card-bg);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 24px;
-            /* اضافه کردن ترنزیشن برای نرم شدن افکت */
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* --- اضافه کردن افکت گلوینگ در حالت هاور --- */
-        .glass-card:hover {
-            /* ایجاد سایه درخشان آبی */
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.6), 
-                        0 0 40px rgba(59, 130, 246, 0.3);
-            /* کمی روشن‌تر کردن حاشیه */
-            border-color: rgba(59, 130, 246, 0.5);
-            /* کمی حرکت به بالا برای حس بهتر */
-            transform: translateY(-2px);
-        }
+        /* افکت گلوینگ اختصاصی برای هر باکس */
+        .card-all:hover { box-shadow: 0 0 25px rgba(59, 130, 246, 0.5); border-color: var(--color-all); transform: translateY(-4px); }
+        .card-vless:hover { box-shadow: 0 0 25px rgba(14, 165, 233, 0.5); border-color: var(--color-vless); transform: translateY(-4px); }
+        .card-vmess:hover { box-shadow: 0 0 25px rgba(168, 85, 247, 0.5); border-color: var(--color-vmess); transform: translateY(-4px); }
+        .card-trojan:hover { box-shadow: 0 0 25px rgba(244, 63, 94, 0.5); border-color: var(--color-trojan); transform: translateY(-4px); }
+        .card-ss:hover { box-shadow: 0 0 25px rgba(16, 185, 129, 0.5); border-color: var(--color-ss); transform: translateY(-4px); }
 
-        /* تنظیم افکت برای حالت لایت مود */
-        .light-mode .glass-card:hover {
-             box-shadow: 0 0 20px rgba(59, 130, 246, 0.4), 
-                         0 0 40px rgba(59, 130, 246, 0.2);
-             border-color: rgba(59, 130, 246, 0.3);
-        }
+        .glow-text-all { color: var(--color-all); text-shadow: 0 0 10px rgba(59, 130, 246, 0.3); }
     </style>
 </head>
 <body class="min-h-screen p-4 md:p-8">
 
     <header class="max-w-4xl mx-auto flex justify-between items-center mb-12">
         <div class="flex items-center gap-4">
-            <img src="icon.jpg" class="w-16 h-16 rounded-2xl shadow-lg border-2 border-blue-500 glow-effect" alt="Logo">
+            <img src="icon.jpg" class="w-16 h-16 rounded-2xl shadow-lg border-2 border-blue-500" alt="Logo">
             <div>
                 <h1 class="text-2xl font-black">پنل هوشمند کانفیگ</h1>
-                <p class="text-gray-400 text-sm">بروزرسانی هر ۲ ساعت</p>
+                <p class="text-gray-400 text-sm">بروزرسانی خودکار هر ۲ ساعت</p>
             </div>
         </div>
-        <button onclick="toggleTheme()" class="w-12 h-12 glass-card flex items-center justify-center text-xl hover:scale-110">
+        <button onclick="toggleTheme()" class="w-12 h-12 glass-card flex items-center justify-center text-xl">
             <i id="theme-icon" class="fas fa-moon"></i>
         </button>
     </header>
 
     <main class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
         
-        <div class="glass-card p-6 col-span-1 md:col-span-2 flex flex-col md:flex-row justify-between items-center gap-6 border-l-4 border-blue-500">
+        <div class="glass-card card-all p-6 col-span-1 md:col-span-2 flex flex-col md:flex-row justify-between items-center gap-6 border-r-4 border-blue-500">
             <div>
                 <h2 class="text-xl font-bold mb-2">مجموع کل کانفیگ‌ها</h2>
-                <p id="count-all" class="text-4xl font-black text-blue-500">---</p>
+                <p id="count-all" class="text-4xl font-black glow-text-all">---</p>
             </div>
-            <button onclick="copyLink('all_raw.txt')" class="bg-blue-600 hover:bg-blue-700 hover:shadow-[0_0_15px_rgba(59,130,246,0.5)] px-8 py-3 rounded-xl font-bold transition-all flex items-center gap-2">
+            <button onclick="copyLink('all_raw.txt')" class="bg-blue-600 hover:bg-blue-700 px-8 py-3 rounded-xl font-bold transition-all flex items-center gap-2">
                 <i class="fas fa-copy"></i> کپی ساب‌لینک اصلی
             </button>
         </div>
 
-        <div class="glass-card p-6 flex justify-between items-center">
+        <div class="glass-card card-vless p-6 flex justify-between items-center border-r-4 border-sky-500">
             <div>
                 <p class="text-gray-400">پروتکل VLESS</p>
-                <p id="count-vless" class="text-2xl font-bold">--</p>
+                <p id="count-vless" class="text-2xl font-bold text-sky-500">--</p>
             </div>
-            <button onclick="copyLink('vless_raw.txt')" class="text-blue-400 hover:bg-blue-500/10 p-3 rounded-lg transition-colors"><i class="fas fa-link"></i></button>
+            <button onclick="copyLink('vless_raw.txt')" class="text-sky-400 hover:bg-sky-500/10 p-3 rounded-lg"><i class="fas fa-link"></i></button>
         </div>
 
-        <div class="glass-card p-6 flex justify-between items-center">
+        <div class="glass-card card-vmess p-6 flex justify-between items-center border-r-4 border-purple-500">
             <div>
                 <p class="text-gray-400">پروتکل VMess</p>
-                <p id="count-vmess" class="text-2xl font-bold">--</p>
+                <p id="count-vmess" class="text-2xl font-bold text-purple-500">--</p>
             </div>
-            <button onclick="copyLink('vmess_raw.txt')" class="text-purple-400 hover:bg-purple-500/10 p-3 rounded-lg transition-colors"><i class="fas fa-link"></i></button>
+            <button onclick="copyLink('vmess_raw.txt')" class="text-purple-400 hover:bg-purple-500/10 p-3 rounded-lg"><i class="fas fa-link"></i></button>
         </div>
 
-        <div class="glass-card p-6 flex justify-between items-center">
+        <div class="glass-card card-trojan p-6 flex justify-between items-center border-r-4 border-rose-500">
             <div>
                 <p class="text-gray-400">پروتکل Trojan</p>
-                <p id="count-trojan" class="text-2xl font-bold">--</p>
+                <p id="count-trojan" class="text-2xl font-bold text-rose-500">--</p>
             </div>
-            <button onclick="copyLink('trojan_raw.txt')" class="text-red-400 hover:bg-red-500/10 p-3 rounded-lg transition-colors"><i class="fas fa-link"></i></button>
+            <button onclick="copyLink('trojan_raw.txt')" class="text-rose-400 hover:bg-rose-500/10 p-3 rounded-lg"><i class="fas fa-link"></i></button>
         </div>
 
-        <div class="glass-card p-6 flex justify-between items-center">
+        <div class="glass-card card-ss p-6 flex justify-between items-center border-r-4 border-emerald-500">
             <div>
                 <p class="text-gray-400">پروتکل Shadowsocks</p>
-                <p id="count-ss" class="text-2xl font-bold">--</p>
+                <p id="count-ss" class="text-2xl font-bold text-emerald-500">--</p>
             </div>
-            <button onclick="copyLink('ss_raw.txt')" class="text-green-400 hover:bg-green-500/10 p-3 rounded-lg transition-colors"><i class="fas fa-link"></i></button>
+            <button onclick="copyLink('ss_raw.txt')" class="text-emerald-400 hover:bg-emerald-500/10 p-3 rounded-lg"><i class="fas fa-link"></i></button>
         </div>
     </main>
 
-    <footer class="mt-16 max-w-4xl mx-auto flex flex-col items-center gap-8 pb-8">
-        <div class="glass-card px-6 py-4 flex flex-col items-center gap-3">
-            <p class="text-gray-500 text-sm font-bold">تعداد بازدید از این صفحه</p>
-            <img src="https://count.getloli.com/get/@smartconfigs_github?theme=rule_734" alt="Visitor Count">
+    <footer class="mt-16 max-w-4xl mx-auto flex flex-col items-center gap-8 pb-10">
+        <div class="glass-card px-8 py-4 flex flex-col items-center gap-2">
+            <p class="text-gray-400 text-xs font-bold uppercase tracking-widest">Global Visitors</p>
+            <img src="https://count.getloli.com/get/@smartconfigs_github?theme=rule_734" alt="Views">
         </div>
 
         <div class="text-center">
-            <p class="text-gray-500 text-sm mb-4">آخرین آپدیت: <span id="last-update" class="text-blue-500">---</span></p>
-            <div class="flex gap-8 justify-center">
-                <a href="https://t.me/smartconfigs" target="_blank" class="text-gray-400 hover:text-blue-400 text-3xl transition-transform hover:scale-125 hover:drop-shadow-[0_0_10px_rgba(59,130,246,0.8)]"><i class="fab fa-telegram"></i></a>
-                <a href="https://github.com/kasesm/Free-Config" target="_blank" class="text-gray-400 hover:text-white text-3xl transition-transform hover:scale-125 hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]"><i class="fab fa-github"></i></a>
+            <p class="text-gray-500 text-sm mb-4">آخرین آپدیت: <span id="last-update" class="text-blue-500 font-bold">---</span></p>
+            <div class="flex gap-6">
+                <a href="https://t.me/smartconfigs" class="text-gray-400 hover:text-blue-400 text-3xl transition-all"><i class="fab fa-telegram"></i></a>
+                <a href="https://github.com/kasesm/Free-Config" class="text-gray-400 hover:text-white text-3xl transition-all"><i class="fab fa-github"></i></a>
             </div>
         </div>
     </footer>
 
     <script>
-        // دریافت داده‌ها از JSON
         fetch('info.json').then(r => r.json()).then(data => {
-            const keys = ['all', 'vless', 'vmess', 'trojan', 'ss'];
-            keys.forEach(k => {
+            ['all', 'vless', 'vmess', 'trojan', 'ss'].forEach(k => {
                 const el = document.getElementById(`count-${k}`);
-                if(el && data[k] !== undefined) el.innerText = data[k] + " مورد";
+                if(el) el.innerText = (data[k] || 0) + " مورد";
             });
             document.getElementById('last-update').innerText = data.last_update;
         });
 
-        // تابع کپی لینک
-        function copyLink(fileName) {
-            const username = window.location.hostname.split('.')[0];
-            const repo = window.location.pathname.split('/')[1] || 'Free-Config';
-            const rawUrl = `https://raw.githubusercontent.com/${username}/${repo}/main/${fileName}`;
-            
-            navigator.clipboard.writeText(rawUrl).then(() => {
-                alert("لینک سابلینک با موفقیت کپی شد!");
-            });
+        function copyLink(f) {
+            const url = `https://raw.githubusercontent.com/kasesm/Free-Config/main/${f}`;
+            navigator.clipboard.writeText(url).then(() => alert("لینک کپی شد!"));
         }
 
-        // تغییر تم
         function toggleTheme() {
-            const body = document.body;
+            document.body.classList.toggle('light-mode');
             const icon = document.getElementById('theme-icon');
-            body.classList.toggle('light-mode');
-            if(body.classList.contains('light-mode')) {
-                icon.classList.replace('fa-moon', 'fa-sun');
-            } else {
-                icon.classList.replace('fa-sun', 'fa-moon');
-            }
+            icon.classList.toggle('fa-moon');
+            icon.classList.toggle('fa-sun');
         }
     </script>
 </body>
