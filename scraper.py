@@ -89,11 +89,26 @@ channels = [
     'filter_breaker', 'iran_v2ray1'
 ]
 
+
 all_extracted = []
+print(f"{'Channel Name':<20} | {'Count':<10}") # یک سرتیتر زیبا برای لاگ گیت‌هاب
+print("-" * 35)
+
 for ch in channels:
-    print(f"Scraping {ch}...")
-    all_extracted.extend(get_live_configs(ch))
-    time.sleep(0.2)
+    configs = get_live_configs(ch)
+    count = len(configs)
+    
+    # چاپ گزارش در بخش Actions
+    print(f"{ch:<20} | {count:<10} ✅")
+    
+    all_extracted.extend([rename_config(c, i + len(all_extracted), f"VIP_{ch}" if ch in vip_channels else "Normal") 
+                          for i, c in enumerate(configs, 1)])
+    time.sleep(0.1)
+
+print("-" * 35)
+print(f"Total Configs Found: {len(all_extracted)}")
+
+
 
 # ۱. حذف تکراری‌ها و فیلتر کردن کانفیگ‌های خیلی کوتاه (خراب)
 unique_raw = list(set([c for c in all_extracted if len(c) > 30]))
