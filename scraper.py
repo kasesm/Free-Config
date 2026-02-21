@@ -6,31 +6,25 @@ import json
 import datetime
 import time
 
-# تابع کمکی برای استخراج کانفیگ از هر متنی
+# تابع کمکی برای استخراج کانفیگ از متن
 def extract_configs(text):
     if not text: return []
     return re.findall(r'(?:vless|vmess|ss|trojan)://[^\s<>"]+', text)
 
-# تابع هوشمند برای تغییر نام کانفیگ‌ها
+# تابع تغییر نام کانفیگ‌ها
 def rename_config(config, index):
     new_name = f"@smartconfigs_{index}"
     try:
         if config.startswith('vmess://'):
-            # استخراج بخش Base64
             b64_part = config[8:]
-            # اصلاح پدینگ
             missing_padding = len(b64_part) % 4
             if missing_padding: b64_part += '=' * (4 - missing_padding)
-            
             data = json.loads(base64.b64decode(b64_part).decode('utf-8'))
             data['ps'] = new_name
             return 'vmess://' + base64.b64encode(json.dumps(data).encode('utf-8')).decode('utf-8')
         else:
-            # برای پروتکل‌های VLESS, Trojan, SS
-            if '#' in config:
-                base = config.split('#')[0]
-                return f"{base}#{new_name}"
-            return f"{config}#{new_name}"
+            base = config.split('#')[0]
+            return f"{base}#{new_name}"
     except:
         return config
 
@@ -38,41 +32,34 @@ def get_live_configs(channel_username):
     username = channel_username.replace('@', '').strip()
     url = f"https://t.me/s/{username}"
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36'}
-    
     found_in_channel = []
     try:
         response = requests.get(url, headers=headers, timeout=15)
         if response.status_code != 200: return []
-        
         soup = BeautifulSoup(response.text, 'html.parser')
         messages = soup.find_all('div', class_='tgme_widget_message_text')
-        
         for msg in messages:
             text = msg.get_text()
-            # ۱. استخراج مستقیم از متن پیام
             found_in_channel.extend(extract_configs(text))
             
-            # ۲. بررسی لینک‌های موجود (برای فایل txt یا سابلینک)
+            # بررسی لینک‌های داخلی برای استخراج از سابلینک‌ها یا فایل‌های متنی
             links = re.findall(r'https?://[^\s<>"]+', text)
             for link in links:
-                if link.endswith('.txt') or 'sub' in link or 'githubusercontent' in link:
+                if any(x in link for x in ['.txt', 'sub', 'githubusercontent']):
                     try:
                         res = requests.get(link, timeout=10)
                         if res.status_code == 200:
                             content = res.text
-                            # بررسی اگر محتوا Base64 بود (سابلینک‌های معمولی)
                             try:
                                 decoded = base64.b64decode(content).decode('utf-8')
                                 found_in_channel.extend(extract_configs(decoded))
                             except:
-                                # اگر متن خام بود
                                 found_in_channel.extend(extract_configs(content))
                     except: continue
         return found_in_channel
-    except:
-        return []
+    except: return []
 
-# لیست کانال‌های هدف
+# لیست کامل کانال‌های شما
 channels = [
     'Azadnet', 'AR14N24B', 'aristapnel', 'arshia_mod_fun', 'canfing_vpn', 
     'capoit', 'configfa', 'configraygan', 'fg_link', 'freenet_vt', 
@@ -89,36 +76,31 @@ channels = [
     'filter_breaker', 'iran_v2ray1'
 ]
 
+all_extracted_raw = []
 
-all_extracted = []
-print(f"{'Channel Name':<20} | {'Count':<10}") # یک سرتیتر زیبا برای لاگ گیت‌هاب
-print("-" * 35)
+# بخش گزارش‌دهی در GitHub Actions
+print(f"{'Channel Name':<25} | {'Count':<10}")
+print("-" * 40)
 
 for ch in channels:
     configs = get_live_configs(ch)
     count = len(configs)
     
-    # چاپ گزارش در بخش Actions
-    print(f"{ch:<20} | {count:<10} ✅")
+    # نمایش وضعیت در کنسول اکشنز
+    print(f"{ch:<25} | {count:<10} {'✅' if count > 0 else '❌'}")
     
-    all_extracted.extend([rename_config(c, i + len(all_extracted), f"VIP_{ch}" if ch in vip_channels else "Normal") 
-                          for i, c in enumerate(configs, 1)])
+    all_extracted_raw.extend(configs)
     time.sleep(0.1)
 
-print("-" * 35)
-print(f"Total Configs Found: {len(all_extracted)}")
+print("-" * 40)
 
+# حذف تکراری‌ها و موارد نامعتبر
+unique_configs = list(set([c for c in all_extracted_raw if len(c) > 30]))
 
+# اعمال تغییر نام نهایی
+final_configs = [rename_config(conf, i) for i, conf in enumerate(unique_configs, 1)]
 
-# ۱. حذف تکراری‌ها و فیلتر کردن کانفیگ‌های خیلی کوتاه (خراب)
-unique_raw = list(set([c for c in all_extracted if len(c) > 30]))
-
-# ۲. تغییر نام همه‌ی کانفیگ‌ها با شماره ردیف
-final_configs = []
-for i, conf in enumerate(unique_raw, 1):
-    final_configs.append(rename_config(conf, i))
-
-# دسته‌بندی برای خروجی
+# دسته‌بندی برای فایل‌ها
 categorized = {
     'all': final_configs,
     'vless': [c for c in final_configs if c.startswith('vless')],
@@ -127,19 +109,17 @@ categorized = {
     'ss': [c for c in final_configs if c.startswith('ss')]
 }
 
-# ذخیره سازی در فایل‌ها
+# ذخیره فایل‌ها
 for key, value in categorized.items():
     content = "\n".join(value)
-    # خروجی خام
     with open(f'{key}_raw.txt', 'w', encoding='utf-8') as f: f.write(content)
-    # خروجی Base64 برای سابلینک
     with open(f'{key}_sub.txt', 'w', encoding='utf-8') as f:
         f.write(base64.b64encode(content.encode('utf-8')).decode('utf-8'))
 
-# به‌روزرسانی آمار در info.json
+# بروزرسانی آمار
 stats = {k: len(v) for k, v in categorized.items()}
 stats['last_update'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
 with open('info.json', 'w', encoding='utf-8') as f:
     json.dump(stats, f, indent=4)
 
-print(f"Done! Total unique configs: {len(final_configs)}")
+print(f"Success! Total Unique Configs: {len(final_configs)}")
