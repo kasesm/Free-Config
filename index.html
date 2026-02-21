@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>پنل هوشمند کانفیگ رایگان</title>
+    <title>پنل هوشمند @smartconfigs</title>
     <link rel="icon" type="image/jpeg" href="icon.jpg">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -14,6 +14,7 @@
             --bg-color: #0d1117;
             --text-color: #ffffff;
             --card-bg: rgba(22, 27, 34, 0.8);
+            --accent: #3b82f6;
         }
 
         .light-mode {
@@ -26,112 +27,123 @@
             background-color: var(--bg-color); 
             color: var(--text-color); 
             font-family: 'Vazirmatn', sans-serif; 
-            transition: background-color 0.4s, color 0.4s;
+            transition: 0.4s;
         }
 
-        .glow-card {
+        .glass-card {
             background: var(--card-bg);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-        }
-
-        .light-mode .glow-card { border: 1px solid rgba(0, 0, 0, 0.05); }
-
-        .glow-card:hover { transform: translateY(-5px); }
-
-        /* Glowing Effects */
-        .glow-all:hover { box-shadow: 0 0 25px rgba(59, 130, 246, 0.5); }
-        .glow-vless:hover { box-shadow: 0 0 25px rgba(34, 197, 94, 0.5); }
-        .glow-vmess:hover { box-shadow: 0 0 25px rgba(168, 85, 247, 0.5); }
-        .glow-trojan:hover { box-shadow: 0 0 25px rgba(239, 68, 68, 0.5); }
-        .glow-ss:hover { box-shadow: 0 0 25px rgba(234, 179, 8, 0.5); }
-
-        #theme-btn {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            z-index: 1000;
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
         }
     </style>
 </head>
-<body class="flex flex-col items-center p-6 min-h-screen">
+<body class="min-h-screen p-4 md:p-8">
 
-    <button id="theme-btn" onclick="toggleTheme()" class="glass p-3 rounded-full w-12 h-12 flex items-center justify-center bg-white/10 hover:scale-110 transition-all border border-white/20">
-        <i id="theme-icon" class="fas fa-moon text-xl text-yellow-400"></i>
-    </button>
-    
-    <header class="text-center mt-10 mb-12">
-        <h1 class="text-5xl md:text-7xl font-black bg-gradient-to-r from-blue-400 via-purple-500 to-cyan-400 bg-clip-text text-transparent pb-4 leading-tight">
-            کانفیگ رایگان
-        </h1>
-        <div class="flex items-center justify-center gap-3 mt-4">
-            <span class="px-3 py-1 bg-blue-500/10 text-blue-400 rounded-full text-xs border border-blue-500/20">
-                <i class="fas fa-sync-alt fa-spin ml-1"></i> بروزرسانی زنده
-            </span>
-            <span id="last-update" class="text-gray-400 text-sm font-bold">...</span>
+    <header class="max-w-4xl mx-auto flex justify-between items-center mb-12">
+        <div class="flex items-center gap-4">
+            <img src="icon.jpg" class="w-16 h-16 rounded-2xl shadow-lg border-2 border-blue-500" alt="Logo">
+            <div>
+                <h1 class="text-2xl font-black">پنل هوشمند کانفیگ</h1>
+                <p class="text-gray-400 text-sm">بروزرسانی هر ۲ ساعت</p>
+            </div>
         </div>
+        <button onclick="toggleTheme()" class="w-12 h-12 glass-card flex items-center justify-center text-xl hover:scale-110 transition-transform">
+            <i id="theme-icon" class="fas fa-moon"></i>
+        </button>
     </header>
 
-    <main class="w-full max-w-lg space-y-5 px-2">
-        <div onclick="copyLink('all_sub.txt')" class="glow-card glow-all rounded-2xl p-6 flex items-center justify-between cursor-pointer group shadow-sm">
-            <span id="count-all" class="text-blue-400 text-xs font-bold bg-blue-500/10 px-3 py-1 rounded-full group-hover:bg-blue-500 group-hover:text-white transition-colors">...</span>
-            <div class="flex items-center gap-4 font-bold text-lg">همه پروتکل‌ها <i class="fas fa-layer-group text-blue-500 text-2xl"></i></div>
+    <main class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <div class="glass-card p-6 col-span-1 md:col-span-2 flex flex-col md:flex-row justify-between items-center gap-6 border-l-4 border-blue-500">
+            <div>
+                <h2 class="text-xl font-bold mb-2">مجموع کل کانفیگ‌ها</h2>
+                <p id="count-all" class="text-4xl font-black text-blue-500">---</p>
+            </div>
+            <button onclick="copyLink('all_raw.txt')" class="bg-blue-600 hover:bg-blue-700 px-8 py-3 rounded-xl font-bold transition-all flex items-center gap-2">
+                <i class="fas fa-copy"></i> کپی ساب‌لینک اصلی
+            </button>
         </div>
 
-        <div onclick="copyLink('vless_sub.txt')" class="glow-card glow-vless rounded-2xl p-6 flex items-center justify-between cursor-pointer group shadow-sm">
-            <span id="count-vless" class="text-green-400 text-xs font-bold bg-green-500/10 px-3 py-1 rounded-full group-hover:bg-green-500 group-hover:text-white transition-colors">...</span>
-            <div class="flex items-center gap-4 font-bold text-lg">پروتکل VLESS <i class="fas fa-shield-halved text-green-500 text-2xl"></i></div>
+        <div class="glass-card p-6 flex justify-between items-center">
+            <div>
+                <p class="text-gray-400">پروتکل VLESS</p>
+                <p id="count-vless" class="text-2xl font-bold">--</p>
+            </div>
+            <button onclick="copyLink('vless_raw.txt')" class="text-blue-400 hover:bg-blue-500/10 p-3 rounded-lg transition-colors"><i class="fas fa-link"></i></button>
         </div>
 
-        <div onclick="copyLink('vmess_sub.txt')" class="glow-card glow-vmess rounded-2xl p-6 flex items-center justify-between cursor-pointer group shadow-sm">
-            <span id="count-vmess" class="text-purple-400 text-xs font-bold bg-purple-500/10 px-3 py-1 rounded-full group-hover:bg-purple-500 group-hover:text-white transition-colors">...</span>
-            <div class="flex items-center gap-4 font-bold text-lg">پروتکل VMESS <i class="fas fa-rocket text-purple-500 text-2xl"></i></div>
+        <div class="glass-card p-6 flex justify-between items-center">
+            <div>
+                <p class="text-gray-400">پروتکل VMess</p>
+                <p id="count-vmess" class="text-2xl font-bold">--</p>
+            </div>
+            <button onclick="copyLink('vmess_raw.txt')" class="text-purple-400 hover:bg-purple-500/10 p-3 rounded-lg transition-colors"><i class="fas fa-link"></i></button>
         </div>
 
-        <div onclick="copyLink('trojan_sub.txt')" class="glow-card glow-trojan rounded-2xl p-6 flex items-center justify-between cursor-pointer group shadow-sm">
-            <span id="count-trojan" class="text-red-400 text-xs font-bold bg-red-500/10 px-3 py-1 rounded-full group-hover:bg-red-500 group-hover:text-white transition-colors">...</span>
-            <div class="flex items-center gap-4 font-bold text-lg">پروتکل Trojan <i class="fas fa-user-secret text-red-500 text-2xl"></i></div>
+        <div class="glass-card p-6 flex justify-between items-center">
+            <div>
+                <p class="text-gray-400">پروتکل Trojan</p>
+                <p id="count-trojan" class="text-2xl font-bold">--</p>
+            </div>
+            <button onclick="copyLink('trojan_raw.txt')" class="text-red-400 hover:bg-red-500/10 p-3 rounded-lg transition-colors"><i class="fas fa-link"></i></button>
         </div>
 
-        <div onclick="copyLink('ss_sub.txt')" class="glow-card glow-ss rounded-2xl p-6 flex items-center justify-between cursor-pointer group shadow-sm">
-            <span id="count-ss" class="text-yellow-400 text-xs font-bold bg-yellow-500/10 px-3 py-1 rounded-full group-hover:bg-yellow-500 group-hover:text-white transition-colors">...</span>
-            <div class="flex items-center gap-4 font-bold text-lg">پروتکل Shadowsocks <i class="fas fa-key text-yellow-500 text-2xl"></i></div>
+        <div class="glass-card p-6 flex justify-between items-center">
+            <div>
+                <p class="text-gray-400">پروتکل Shadowsocks</p>
+                <p id="count-ss" class="text-2xl font-bold">--</p>
+            </div>
+            <button onclick="copyLink('ss_raw.txt')" class="text-green-400 hover:bg-green-500/10 p-3 rounded-lg transition-colors"><i class="fas fa-link"></i></button>
         </div>
     </main>
 
-    <footer class="mt-20 flex gap-12">
-        <a href="https://www.t.me/smartconfigs" target="_blank" class="text-gray-500 hover:text-blue-400 transition-all text-4xl hover:scale-110"><i class="fab fa-telegram"></i></a>
-        <a href="https://www.instagram.com/_demonedge_/" target="_blank" class="text-gray-500 hover:text-pink-500 transition-all text-4xl hover:scale-110"><i class="fab fa-instagram"></i></a>
+    <footer class="mt-16 max-w-4xl mx-auto flex flex-col items-center gap-8">
+        <div class="flex flex-col items-center gap-3">
+            <p class="text-gray-500 text-sm font-bold">تعداد بازدید از این صفحه</p>
+            <img src="https://count.getloli.com/get/@smartconfigs_github?theme=rule_734" alt="Visitor Count">
+        </div>
+
+        <div class="text-center">
+            <p class="text-gray-500 text-sm mb-4">آخرین آپدیت: <span id="last-update" class="text-blue-500">---</span></p>
+            <div class="flex gap-8 justify-center">
+                <a href="https://t.me/smartconfigs" target="_blank" class="text-gray-400 hover:text-blue-400 text-3xl transition-transform hover:scale-125"><i class="fab fa-telegram"></i></a>
+                <a href="https://github.com/kasesm/Free-Config" target="_blank" class="text-gray-400 hover:text-white text-3xl transition-transform hover:scale-125"><i class="fab fa-github"></i></a>
+            </div>
+        </div>
     </footer>
 
     <script>
-        // Fetch Data
+        // دریافت داده‌ها از JSON
         fetch('info.json').then(r => r.json()).then(data => {
             const keys = ['all', 'vless', 'vmess', 'trojan', 'ss'];
-            keys.forEach(k => { if(data[k] !== undefined) document.getElementById(`count-${k}`).innerText = data[k] + " مورد"; });
+            keys.forEach(k => {
+                const el = document.getElementById(`count-${k}`);
+                if(el && data[k] !== undefined) el.innerText = data[k] + " مورد";
+            });
             document.getElementById('last-update').innerText = data.last_update;
         });
 
-        // Copy Function
-        function copyLink(f) {
-            const user = window.location.hostname.split('.')[0];
-            const repo = window.location.pathname.split('/')[1] || '';
-            const rawUrl = `https://raw.githubusercontent.com/${user}/${repo}/main/${f}`;
-            navigator.clipboard.writeText(rawUrl).then(() => alert("لینک کپی شد!"));
+        // تابع کپی لینک
+        function copyLink(fileName) {
+            const username = window.location.hostname.split('.')[0];
+            const repo = window.location.pathname.split('/')[1] || 'Free-Config';
+            const rawUrl = `https://raw.githubusercontent.com/${username}/${repo}/main/${fileName}`;
+            
+            navigator.clipboard.writeText(rawUrl).then(() => {
+                alert("لینک سابلینک با موفقیت کپی شد!");
+            });
         }
 
-        // Theme Toggle
+        // تغییر تم
         function toggleTheme() {
             const body = document.body;
             const icon = document.getElementById('theme-icon');
             body.classList.toggle('light-mode');
             if(body.classList.contains('light-mode')) {
                 icon.classList.replace('fa-moon', 'fa-sun');
-                icon.style.color = '#f59e0b';
             } else {
                 icon.classList.replace('fa-sun', 'fa-moon');
-                icon.style.color = '#facc15';
             }
         }
     </script>
