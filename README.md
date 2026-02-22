@@ -103,7 +103,7 @@ For access to the smart panel and more information:
 3. Update/refresh the subscription
 4. Connect to your preferred server
 
-###📝 نحوه استفاده
+### 📝 نحوه استفاده
 
 ۱. لینک اشتراک مورد نظر را کپی کنید
 
