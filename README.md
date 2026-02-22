@@ -9,22 +9,22 @@
 
 ## 🔗 ساب‌لینک‌های کانفیگ
 
-### VLESS
+### وی لس
 ```
 https://raw.githubusercontent.com/kasesm/Free-Config/refs/heads/main/vless_raw.txt
 ```
 
-### VMess
+### وی مس
 ```
 https://raw.githubusercontent.com/kasesm/Free-Config/refs/heads/main/vmess_raw.txt
 ```
 
-### Trojan
+### تورجان
 ```
 https://raw.githubusercontent.com/kasesm/Free-Config/refs/heads/main/trojan_raw.txt
 ```
 
-### Shadowsocks
+### اس اس
 ```
 https://raw.githubusercontent.com/kasesm/Free-Config/refs/heads/main/ss_raw.txt
 ```
@@ -32,6 +32,11 @@ https://raw.githubusercontent.com/kasesm/Free-Config/refs/heads/main/ss_raw.txt
 ### همه کانفیگ‌ها
 ```
 https://raw.githubusercontent.com/kasesm/Free-Config/refs/heads/main/all_raw.txt
+```
+
+### کانفیگ حجیم
+```
+https://raw.githubusercontent.com/kasesm/Free-Config/refs/heads/main/high_volume_raw.txt
 ```
 
 ## 🌐 پنل هوشمند کانفیگ‌ها
@@ -74,6 +79,11 @@ https://raw.githubusercontent.com/kasesm/Free-Config/refs/heads/main/ss_raw.txt
 ### All Configs
 ```
 https://raw.githubusercontent.com/kasesm/Free-Config/refs/heads/main/all_raw.txt
+```
+
+### High Value Configs
+```
+https://raw.githubusercontent.com/kasesm/Free-Config/refs/heads/main/high_volume_raw.txt
 ```
 
 ## 🌐 Smart Config Panel
