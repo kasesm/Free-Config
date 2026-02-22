@@ -81,7 +81,7 @@ https://raw.githubusercontent.com/kasesm/Free-Config/refs/heads/main/ss_raw.txt
 https://raw.githubusercontent.com/kasesm/Free-Config/refs/heads/main/all_raw.txt
 ```
 
-### High Value Configs
+### High Volume Configs
 ```
 https://raw.githubusercontent.com/kasesm/Free-Config/refs/heads/main/high_volume_raw.txt
 ```
