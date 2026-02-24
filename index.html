@@ -42,7 +42,6 @@
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* حاشیه نازک دور باکس‌ها و افکت گلوینگ تشدید شده */
         .card-hv { border: 1px solid rgba(239, 68, 68, 0.3); }
         .card-hv:hover { 
             border-color: var(--color-hv); 
@@ -70,7 +69,6 @@
         .card-ss { border-color: rgba(16, 185, 129, 0.3); }
         .card-ss:hover { border-color: var(--color-ss); box-shadow: 0 0 25px rgba(16, 185, 129, 0.5); transform: translateY(-5px); }
 
-        /* Social Icons Glow */
         .tg-hover:hover { color: #229ED9; filter: drop-shadow(0 0 15px #229ED9); transform: scale(1.2); }
         .gh-hover:hover { color: #ffffff; filter: drop-shadow(0 0 15px #ffffff); transform: scale(1.2); }
         .ig-hover:hover { color: #E1306C; filter: drop-shadow(0 0 15px #E1306C); transform: scale(1.2); }
@@ -82,6 +80,51 @@
             width: 60px; height: 60px;
             display: flex; align-items: center; justify-content: center;
             border-radius: 18px;
+        }
+
+        /* ===== Counter ===== */
+        .counter-value {
+            font-size: 2.4rem;
+            font-weight: 900;
+            line-height: 1;
+            background: linear-gradient(135deg, #60a5fa, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            min-width: 80px;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .counter-value-daily {
+            background: linear-gradient(135deg, #34d399, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .pulse-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .counter-skeleton {
+            width: 80px; height: 40px;
+            border-radius: 8px;
+            background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
         }
     </style>
 </head>
@@ -166,15 +209,39 @@
     </main>
 
     <footer class="mt-16 w-full max-w-4xl flex flex-col items-center gap-8 pb-12">
-        <div class="glass-card p-8 w-full flex flex-col md:flex-row justify-around items-center gap-8 border-b-2 border-blue-500/30">
+
+        <div class="glass-card p-8 w-full flex flex-col md:flex-row justify-around items-center gap-8 border border-white/5 border-b-2 border-b-blue-500/30">
+            
+            <!-- بازدید امروز -->
             <div class="flex flex-col items-center gap-3">
-                <span class="text-gray-500 text-xs font-bold uppercase tracking-widest">بازدید امروز</span>
-                <img src="https://count.getloli.com/get/@smartconfigs_daily?theme=rule73" alt="Daily View" />
+                <div class="flex items-center gap-2">
+                    <div class="pulse-dot bg-emerald-400"></div>
+                    <span class="text-gray-400 text-xs font-bold uppercase tracking-widest">بازدید امروز</span>
+                </div>
+                <div class="flex items-end gap-2">
+                    <p id="daily-count" class="counter-value counter-value-daily">
+                        <span class="counter-skeleton"></span>
+                    </p>
+                    <span class="text-gray-500 text-sm mb-1">نفر</span>
+                </div>
+                <span class="text-gray-600 text-xs" id="today-label"></span>
             </div>
-            <div class="hidden md:block w-px h-16 bg-gray-800"></div>
+
+            <div class="hidden md:block w-px h-16 bg-gradient-to-b from-transparent via-gray-700 to-transparent"></div>
+
+            <!-- بازدید کل -->
             <div class="flex flex-col items-center gap-3">
-                <span class="text-gray-500 text-xs font-bold uppercase tracking-widest">بازدید کل سایت</span>
-                <img src="https://count.getloli.com/get/@smartconfigs_total?theme=rule73" alt="Total View" />
+                <div class="flex items-center gap-2">
+                    <div class="pulse-dot bg-blue-400"></div>
+                    <span class="text-gray-400 text-xs font-bold uppercase tracking-widest">بازدید کل سایت</span>
+                </div>
+                <div class="flex items-end gap-2">
+                    <p id="total-count" class="counter-value">
+                        <span class="counter-skeleton"></span>
+                    </p>
+                    <span class="text-gray-500 text-sm mb-1">نفر</span>
+                </div>
+                <span class="text-gray-600 text-xs">از ابتدا تاکنون</span>
             </div>
         </div>
 
@@ -193,6 +260,13 @@
     </footer>
 
     <script>
+        // ============================================================
+        //  آدرس Worker خودت رو اینجا بذار
+        //  مثال: https://smartconfigs-visits.YOUR-NAME.workers.dev
+        // ============================================================
+        const WORKER_URL = 'https://smartconfigs-visits.task132141.workers.dev/';
+
+        // ===== لود اطلاعات کانفیگ =====
         fetch('info.json').then(r => r.json()).then(data => {
             ['all', 'vless', 'vmess', 'trojan', 'ss'].forEach(k => {
                 const el = document.getElementById(`count-${k}`);
@@ -201,8 +275,87 @@
             const hvEl = document.getElementById('count-hv');
             if(hvEl) hvEl.innerText = (data.hv_count || 0).toLocaleString('fa-IR') + " کانفیگ";
             document.getElementById('last-update').innerText = data.last_update;
-        });
+        }).catch(() => {});
 
+        // ===== تاریخ امروز =====
+        function showDate() {
+            const now = new Date();
+            document.getElementById('today-label').innerText = 
+                now.toLocaleDateString('fa-IR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        }
+
+        // ===== انیمیشن شمارنده =====
+        function animateCounter(id, target, isDaily = false) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.innerHTML = '';
+            
+            let current = 0;
+            const duration = 1000;
+            const steps = 60;
+            const increment = target / steps;
+            const interval = duration / steps;
+
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                el.innerText = Math.floor(current).toLocaleString('fa-IR');
+            }, interval);
+        }
+
+        // ===== ثبت بازدید و دریافت آمار از Worker =====
+        async function trackVisit() {
+            try {
+                // ارسال بازدید به Worker
+                const res = await fetch(`${WORKER_URL}/visit`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                });
+                
+                if (!res.ok) throw new Error('Worker error');
+                const data = await res.json();
+
+                animateCounter('daily-count', data.daily, true);
+                animateCounter('total-count', data.total);
+
+            } catch (err) {
+                // اگه Worker در دسترس نبود، از localStorage بخون
+                console.warn('Worker unavailable, using localStorage fallback');
+                fallbackCounter();
+            }
+        }
+
+        // ===== Fallback با localStorage (اگه Worker کار نکرد) =====
+        function fallbackCounter() {
+            const todayKey = (() => {
+                const d = new Date();
+                return `v_${d.getFullYear()}_${d.getMonth()}_${d.getDate()}`;
+            })();
+            const totalKey = 'v_total';
+            const sessionKey = 'counted_' + todayKey;
+
+            let daily = parseInt(localStorage.getItem(todayKey) || '0');
+            let total = parseInt(localStorage.getItem(totalKey) || '0');
+
+            if (!sessionStorage.getItem(sessionKey)) {
+                daily++; total++;
+                localStorage.setItem(todayKey, daily);
+                localStorage.setItem(totalKey, total);
+                sessionStorage.setItem(sessionKey, '1');
+            }
+
+            animateCounter('daily-count', daily, true);
+            animateCounter('total-count', total);
+        }
+
+        // ===== اجرا =====
+        showDate();
+        trackVisit();
+
+        // ===== توابع عمومی =====
         function copyLink(f) {
             const url = `https://raw.githubusercontent.com/kasesm/Free-Config/main/${f}`;
             navigator.clipboard.writeText(url).then(() => {
