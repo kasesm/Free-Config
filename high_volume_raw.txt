@@ -1,5 +1,5 @@
-trojan://humanity@www.ignitelimit.com:443?path=%2FAssignment&security=tls&fp=chrome&type=ws&sni=www.ignitelimit.com#@smartconfigs
 ss://YWVzLTEyOC1nY206c2hhZG93c29ja3M=@156.146.38.170:443#@smartconfigs
 vless://c7201267-8439-4ba6-8c41-fc0ecd5472b3@mochi-d1bdb57cd7-kalak.apps.ir-central1.arvancaas.ir:443?path=%2Fvless&security=tls&encryption=none&insecure=0&host=mochi-d1bdb57cd7-kalak.apps.ir-central1.arvancaas.ir&type=ws&allowInsecure=0#@smartconfigs
+trojan://humanity@www.ignitelimit.com:443?path=%2FAssignment&security=tls&fp=chrome&type=ws&sni=www.ignitelimit.com#@smartconfigs
 vless://d134e959-783c-4ef9-a10b-f63285ce10de@snapp.ir:8080?path=%2F&security=none&encryption=none&host=dnsdivar.khanumjan.ir&type=ws#@smartconfigs
 vless://0dac1eb4-ec6b-4572-99c4-5df68a4bcc02@185.143.233.5:443?path=%2Fchat%3Fed%3D128&security=tls&alpn=h2%2Chttp%2F1.1&encryption=none&host=dn.8lack.ir&fp=firefox&type=ws&sni=dn.8lack.ir#@smartconfigs
