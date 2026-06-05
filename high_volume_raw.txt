@@ -1,2 +1,0 @@
-vless://c7201267-8439-4ba6-8c41-fc0ecd5472b3@mochi-d1bdb57cd7-kalak.apps.ir-central1.arvancaas.ir:443?path=%2Fvless&security=tls&encryption=none&insecure=0&host=mochi-d1bdb57cd7-kalak.apps.ir-central1.arvancaas.ir&type=ws&allowInsecure=0#@smartconfigs
-vless://d134e959-783c-4ef9-a10b-f63285ce10de@snapp.ir:8080?path=%2F&security=none&encryption=none&host=dnsdivar.khanumjan.ir&type=ws#@smartconfigs
