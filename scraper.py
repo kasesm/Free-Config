@@ -86,7 +86,19 @@ normal_channels = [
     'prrofile_purple', 'v2_mod_shop', 'anty_filter', 'YamYamProxy', 'ettehad_vpn', 'DarkTeam_VPN', 'iran_v2ray1',
     'samiotech', 'Hope_Net', 'ProxyFa10', 'NEW_MTProxi2', 'proxytel_fast', 'Fr33C0nfig', 'sinavm',
     'customv2ray', 'v2Line', 'GozargahVPN', 'v2raycollector', 'taynnovpn', 'NIM_VPN_ir', 'ShadowProxy66',
-    'FalconPolV2rayNG', 'CUSTOMVPNSERVER', 'lrnbymaa', 'nofiltering2', 'MTproxy22_v2ray',
+    'FalconPolV2rayNG', 'CUSTOMVPNSERVER', 'lrnbymaa', 'nofiltering2', 'MTproxy22_v2ray', 'Spotify_Porteghali',
+    'lightning6','shaxhabb','meliproxyy','ProxyMTProto','LonUp_M','sorenab2','ProxyDaemi','iMTProto','v2rayngvpn'
+    'ConfigX2ray','IraneAzad_Net','V2WRAY','TelMTProto','v2ryNG01','V2ray_official','TheAnilad',
+    'ProxyDotNet','NPROXY','mrsoulb','ConfigsHUB','orange_vpns','BugFreeNet','TeleProxyTele','iproxy_Meli','SimChin_ir',
+    'V2rayEnglish','v2nova8','NetAccount','qpshow','DarkHub_VPN','configmax','nufilter','V2RAY_SPATIAL','PulseStore_ir',
+    'NETMelliAnti','isubvpn','Blue_star_Vip','Maznet','cpy_teeL','NetAccount','beshcan','Parsashonam','ProxySnipe','Merlin_ViP',
+    'ghalagyann','Free_Nettm','EzAccess1','ChinaPortGFW','filshekan_vip','ProxyPJ','AzadNet','ShabrangVPN','V2Ray_Tz','acccrd',
+    'DSR_TM','BestProxyTel1','configraygan','configshere','VpnQavi','v2ray_dalghak','v2rayng_fars','saka_net','config_npv',
+    'Outline_vpn','freakconfig','flyv2ray','PROXIS_FREE','chatnakonn','proxyxix','letsproxys','proxyy_1404','duckvp_n',
+    '+JtInm8-guq41OTJi','duckvp_n','proxy_kafee','WizProxy','singbox1','Farsroid_Club','filter_breaker',
+    'ProxyFa10','taziyanteam','V2rayGulf','VIPV2rayNGNP','oliver_soul','internetAzad_Pro','wibeofme','Thirty_secunds',
+    'NETMelliAnti','herwonderland','ConfigX2ray','iDeathBirth','BestProxyTel1','training_apks','Parsashonam','UnNurmal',
+    'config_salavatii', 'Frenpv', 'wibeofme', 'oxnet_ir', 'pingseven', 'erfanandroid',
 ]
 
 print(f"{'Channel Name':<25} | {'Count':<10}")
