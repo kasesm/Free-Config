@@ -12,7 +12,7 @@ def extract_configs(text):
 
 def rename_config(config, index, is_special=False):
     # نام پایه طبق خواسته شما
-    new_name = "@smartconfigs"
+    new_name = "@npv_vpn11"
     # اگر از کانال ویژه بود، تگ ویژه اضافه شود
     if is_special:
         new_name += "_(ویژه)"
