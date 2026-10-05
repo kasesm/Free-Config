@@ -1,9 +1,9 @@
 {
-    "all": 1019,
-    "vless": 810,
-    "vmess": 63,
-    "trojan": 65,
-    "ss": 81,
+    "all": 1117,
+    "vless": 876,
+    "vmess": 57,
+    "trojan": 113,
+    "ss": 71,
     "hv_count": 26,
-    "last_update": "2026-10-04 20:35"
+    "last_update": "2026-10-05 00:18"
 }
